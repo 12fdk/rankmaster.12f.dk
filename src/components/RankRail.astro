@@ -1,0 +1,302 @@
+---
+// The rank rail — the signature component (DESIGN.md §5).
+//
+// Inline SVG with NO viewBox, so one SVG user unit is one CSS pixel: the thumb
+// stays 28px and the ticks stay 9px at every column width, while rank
+// positions are given as percentages of the track. A viewBox would scale the
+// instrument down with the column and turn a machined thumb into a dot.
+//
+// The track is inset by the thumb's radius plus its glow (--rail-inset) so
+// rank 1 and rank max sit fully on the page, and the SVG is overflow:visible
+// so the glow and the labels may hang outside their box.
+//
+// Anatomy, bottom to top, all eight parts:
+//   1 baseline · 2 fill (25%→100% gradient) · 3 ticks · 4 thumb (ring cut-out)
+//   5 blade · 6 guess label · 7 truth pin (reveal) · 8 gap bridge (reveal)
+import { ordinal } from "../utils/ordinal";
+
+interface Props {
+  /** Lowest rank on the scale. */
+  min?: number;
+  /** Highest rank on the scale. */
+  max: number;
+  /** The player's guess. */
+  guess: number;
+  /** The correct rank. Passing it puts the rail in its reveal state. */
+  truth?: number | null;
+  /** The big "NO. 4" readout above the rail. */
+  numeral?: boolean;
+  /** Accessible name, e.g. "Your guess for Australia's rank". */
+  label: string;
+  /** Wire the 64px drag band and expose a real slider (issue #5). */
+  interactive?: boolean;
+  locale?: string;
+  id?: string;
+  class?: string;
+}
+
+const {
+  min = 1,
+  max,
+  guess,
+  truth = null,
+  numeral = true,
+  label,
+  interactive = false,
+  locale = "en",
+  id,
+  class: className,
+} = Astro.props;
+
+const uid = id ?? `rail-${Math.random().toString(36).slice(2, 9)}`;
+const revealed = truth !== null;
+
+/** Rank → percentage along the track. */
+const pct = (rank: number) => ((rank - min) / (max - min)) * 100;
+const guessPct = pct(guess);
+const truthPct = truth !== null ? pct(truth) : 0;
+
+// Above 20 ranks in the range, drop the minors and draw majors only, or the
+// rail turns into a solid block (DESIGN.md §5.3).
+const span = max - min + 1;
+const ticks = Array.from({ length: span }, (_, i) => min + i).map((rank) => ({
+  rank,
+  x: pct(rank),
+  major: rank === min || rank === max || rank % 5 === 0,
+}));
+const drawMinors = span <= 20;
+
+// Vertical layout, in px. The SVG is 92 tall; the glow and the numeral
+// overflow it deliberately.
+const Y_RAIL = 34;
+const R_THUMB = 14;
+const R_PIN = 11;
+---
+
+<div
+  class:list={["rail", revealed && "rail--revealed", interactive && "rail--interactive", className]}
+  id={uid}
+  data-min={min}
+  data-max={max}
+  data-guess={guess}
+  data-truth={truth ?? undefined}
+>
+  {
+    numeral && (
+      <p class="rail__readout" aria-hidden="true">
+        <span class="rail__readout-inner" style={`--pos:${guessPct}%`} data-rail-readout>
+          <span class="rail__readout-prefix">No.</span>
+          <span class="rail__readout-value" data-rail-numeral>{guess}</span>
+        </span>
+      </p>
+    )
+  }
+
+  <div
+    class="rail__track"
+    role={interactive ? "slider" : undefined}
+    tabindex={interactive ? 0 : undefined}
+    aria-label={interactive ? label : undefined}
+    aria-valuemin={interactive ? min : undefined}
+    aria-valuemax={interactive ? max : undefined}
+    aria-valuenow={interactive ? guess : undefined}
+    aria-valuetext={interactive ? `Rank ${guess} of ${max}` : undefined}
+    aria-orientation={interactive ? "horizontal" : undefined}
+  >
+    <svg
+      class="rail__svg"
+      height="92"
+      width="100%"
+      role={interactive ? "presentation" : "img"}
+      aria-hidden={interactive ? "true" : undefined}
+      aria-label={interactive ? undefined : label}
+    >
+      <defs>
+        {/* The fill fades from 25% at the left to 100% at the thumb. The
+            gradient is what makes it read as accumulated distance rather than
+            as a progress bar — a flat fill is wrong (DESIGN.md §5.2). */}
+        <linearGradient id={`${uid}-fill`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="var(--guess-ink)" stop-opacity="0.25"></stop>
+          <stop offset="1" stop-color="var(--guess-ink)" stop-opacity="1"></stop>
+        </linearGradient>
+        {/* Gold as a filled surface is always the gradient, never a flat slab. */}
+        <linearGradient id={`${uid}-thumb`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--guess-fill)"></stop>
+          <stop offset="1" stop-color="var(--guess-fill-deep)"></stop>
+        </linearGradient>
+        {/* The glow. A radial gradient rather than feGaussianBlur: same soft
+            halo, no filter region to overflow, no per-frame blur cost while
+            the thumb is being dragged. */}
+        <radialGradient id={`${uid}-glow`}>
+          <stop offset="0" stop-color="var(--guess-ink)" stop-opacity="0.45"></stop>
+          <stop offset="0.45" stop-color="var(--guess-ink)" stop-opacity="0.24"></stop>
+          <stop offset="1" stop-color="var(--guess-ink)" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id={`${uid}-glow-truth`}>
+          <stop offset="0" stop-color="var(--truth)" stop-opacity="0.45"></stop>
+          <stop offset="0.45" stop-color="var(--truth)" stop-opacity="0.24"></stop>
+          <stop offset="1" stop-color="var(--truth)" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      {/* 3 — ticks. Drawn under the fill and the thumb. */}
+      <g class="rail__ticks" aria-hidden="true">
+        {
+          ticks
+            .filter((t) => t.major || drawMinors)
+            .map((t) => (
+              <line
+                x1={`${t.x}%`}
+                x2={`${t.x}%`}
+                y1={Y_RAIL - (t.major ? 8 : 4.5)}
+                y2={Y_RAIL + (t.major ? 8 : 4.5)}
+                class={t.major ? "rail__tick rail__tick--major" : "rail__tick"}
+              />
+            ))
+        }
+      </g>
+
+      {/* 1 — baseline */}
+      <rect x="0" y={Y_RAIL - 1.5} width="100%" height="3" rx="1.5" class="rail__baseline"></rect>
+
+      {/* 2 — fill: rank min → the guess */}
+      <rect
+        x="0"
+        y={Y_RAIL - 1.5}
+        width={`${guessPct}%`}
+        height="3"
+        rx="1.5"
+        fill={`url(#${uid}-fill)`}
+        class="rail__fill"
+        data-rail-fill
+      >
+      </rect>
+
+      {/* 8 — gap bridge. This is the point of the whole thing: the error is a
+          physical distance you can see. */}
+      {
+        revealed && (
+          <line
+            x1={`${guessPct}%`}
+            x2={`${truthPct}%`}
+            y1={Y_RAIL}
+            y2={Y_RAIL}
+            class="rail__bridge"
+            data-rail-bridge
+          />
+        )
+      }
+
+      {/* 5 — blade: 1px gold, rising 12px from the thumb toward the numeral */}
+      <line
+        x1={`${guessPct}%`}
+        x2={`${guessPct}%`}
+        y1={Y_RAIL - R_THUMB - 12}
+        y2={Y_RAIL - R_THUMB}
+        class="rail__blade"
+        data-rail-blade
+        aria-hidden="true"></line>
+
+      {/* 4 — thumb: gold disc, 4px --ground ring cut out of it, 1px gold outer
+          stroke, over the glow. The cut-out ring is what makes it look
+          machined rather than painted on. */}
+      <g data-rail-thumb style={`--pos:${guessPct}%`}>
+        <circle cx={`${guessPct}%`} cy={Y_RAIL} r="30" fill={`url(#${uid}-glow)`} aria-hidden="true"
+        ></circle>
+        <circle cx={`${guessPct}%`} cy={Y_RAIL} r={R_THUMB} fill={`url(#${uid}-thumb)`}></circle>
+        <circle
+          cx={`${guessPct}%`}
+          cy={Y_RAIL}
+          r={R_THUMB - 2}
+          class="rail__cutout"
+          fill="none"
+          stroke-width="4"></circle>
+        <circle
+          cx={`${guessPct}%`}
+          cy={Y_RAIL}
+          r={R_THUMB}
+          class="rail__thumb-edge"
+          fill="none"
+          stroke-width="1"></circle>
+      </g>
+
+      {/* 6 — guess label, hanging below the thumb */}
+      <text
+        x={`${guessPct}%`}
+        y={Y_RAIL + R_THUMB + 17}
+        class="rail__label rail__label--guess"
+        text-anchor="middle"
+        data-rail-guess-label
+      >
+        {ordinal(guess, locale)}
+      </text>
+
+      {/* 7 — truth pin: same ring construction, sitting on the line, its rank
+          in teal ABOVE it. Above and not below because the guess took the
+          space underneath, and two labels under one rail collide at a
+          distance of one — the commonest near miss, and the exact case the
+          reveal exists to celebrate. */}
+      {
+        revealed && (
+          <g data-rail-truth>
+            <circle
+              cx={`${truthPct}%`}
+              cy={Y_RAIL}
+              r="24"
+              fill={`url(#${uid}-glow-truth)`}
+              aria-hidden="true"
+            />
+            <circle cx={`${truthPct}%`} cy={Y_RAIL} r={R_PIN} class="rail__pin" />
+            <circle
+              cx={`${truthPct}%`}
+              cy={Y_RAIL}
+              r={R_PIN - 1.6}
+              class="rail__cutout"
+              fill="none"
+              stroke-width="3.2"
+            />
+            <circle
+              cx={`${truthPct}%`}
+              cy={Y_RAIL}
+              r={R_PIN}
+              class="rail__pin-edge"
+              fill="none"
+              stroke-width="1"
+            />
+            <text
+              x={`${truthPct}%`}
+              y={Y_RAIL - R_PIN - 7}
+              class="rail__label rail__label--truth"
+              text-anchor="middle"
+            >
+              {ordinal(truth as number, locale)}
+            </text>
+          </g>
+        )
+      }
+
+      {/* End labels. Hidden when a mark already sits on that end, so the scale
+          does not print "1st" twice, one above the other. Always rendered and
+          toggled by class, so the demo can hide and show them without
+          rebuilding nodes mid-drag. */}
+      <text
+        x="0"
+        y={Y_RAIL + R_THUMB + 38}
+        class:list={["rail__end", (guess === min || truth === min) && "is-hidden"]}
+        text-anchor="start"
+        data-rail-end="min"
+      >
+        {ordinal(min, locale)}
+      </text>
+      <text
+        x="100%"
+        y={Y_RAIL + R_THUMB + 38}
+        class:list={["rail__end", (guess === max || truth === max) && "is-hidden"]}
+        text-anchor="end"
+        data-rail-end="max"
+      >
+        {ordinal(max, locale)}
+      </text>
+    </svg>
+  </div>
+</div>

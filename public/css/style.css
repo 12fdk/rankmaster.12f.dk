@@ -540,3 +540,184 @@ ul {
     transform: none;
   }
 }
+
+/* ============================================================================
+   The rank rail (DESIGN.md §5) — the signature component.
+   The one element allowed to span the full text column.
+   ========================================================================= */
+
+.rail {
+  /* Enough to clear the thumb's 30px glow at rank 1 and rank max, so the
+     instrument never looks clipped against the page gutter. */
+  --rail-inset: 32px;
+  /* The colour cut out of the thumb and the truth pin. It must be whatever is
+     actually behind the rail — override it to --surface inside a panel. */
+  --rail-ring: var(--ground);
+  width: 100%;
+}
+
+.rail__readout,
+.rail__track {
+  margin-inline: var(--rail-inset);
+}
+
+/* The big readout above the rail, centred on the thumb and tied to it by the
+   blade. Gold while you are guessing; once the truth is on the rail it steps
+   back to --text-secondary, because it is no longer the live answer. */
+.rail__readout {
+  position: relative;
+  height: var(--size-numeral);
+  margin-bottom: var(--space-xs);
+}
+
+.rail__readout-inner {
+  position: absolute;
+  bottom: 0;
+  left: var(--pos);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.rail__readout-prefix {
+  font-family: var(--font-ui);
+  font-size: var(--size-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--guess-ink);
+}
+
+.rail__readout-value {
+  font-family: var(--font-display);
+  font-size: var(--size-numeral);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--guess-ink);
+}
+
+.rail--revealed .rail__readout-prefix,
+.rail--revealed .rail__readout-value {
+  color: var(--text-secondary);
+}
+
+.rail__track {
+  position: relative;
+}
+
+/* Overflow is visible on purpose: the glow, the blade and the labels all hang
+   outside the SVG's own box. */
+.rail__svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.rail__baseline {
+  /* --line, not --sunken. §2 calls --sunken "the unfilled rail track", but §5
+     specifies the baseline as --line and the app draws it that way: at
+     1.36:1 --line is already a hairline, and --sunken (#05081A) on --ground
+     is 1.26:1 the other way — a track you cannot see is not a scale. */
+  fill: var(--line);
+}
+
+.rail__tick {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+/* Major ticks sit at the first rank, the last rank and every multiple of
+   five, in gold at 25% — a scale marking, not a second accent. */
+.rail__tick--major {
+  stroke: rgb(var(--guess-ink-rgb) / 0.25);
+}
+
+.rail__cutout {
+  stroke: var(--rail-ring);
+}
+
+.rail__thumb-edge {
+  stroke: var(--guess-ink);
+}
+
+.rail__pin {
+  fill: var(--truth);
+}
+
+.rail__pin-edge {
+  stroke: var(--truth);
+}
+
+.rail__blade {
+  stroke: var(--guess-ink);
+  stroke-width: 1;
+}
+
+/* Neutral on purpose. The bridge measures the error; it belongs to neither
+   the guess nor the truth, so it may not be drawn in either meaning colour. */
+.rail__bridge {
+  stroke: var(--text-secondary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 3 7;
+  opacity: 0.3;
+}
+
+.rail__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.rail__label--guess {
+  fill: var(--guess-ink);
+}
+
+.rail__label--truth {
+  fill: var(--truth);
+}
+
+.rail__end {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--text-tertiary);
+}
+
+/* The interactive band is 64px tall even though the rail draws 3px of line:
+   drag anywhere in it and the rank under the pointer is selected. The thumb
+   does not have to be grabbed. */
+.rail--interactive .rail__track {
+  cursor: pointer;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.rail--interactive .rail__track::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--rail-inset) * -1);
+  right: calc(var(--rail-inset) * -1);
+  top: 2px;
+  height: 64px;
+}
+
+.rail--interactive .rail__track:focus-visible {
+  outline: 2px solid var(--guess-ink);
+  outline-offset: 6px;
+  border-radius: var(--radius-s);
+}
+
+.rail--interactive[aria-disabled="true"] .rail__track,
+.rail--locked .rail__track {
+  cursor: default;
+}
+
+.rail__end.is-hidden {
+  visibility: hidden;
+}

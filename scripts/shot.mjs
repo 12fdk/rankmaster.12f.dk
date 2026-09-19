@@ -113,6 +113,45 @@ for (let i = 0; i < 150; i++) {
 await send("Runtime.evaluate", { expression: "document.fonts.ready", awaitPromise: true });
 await sleep(Number(flags.settle ?? 600));
 
+// --drag='<selector>|<from>|<to>' drags across an element, as fractions of its
+// width. Real CDP mouse events, so pointer capture behaves as it does for a
+// finger — synthetic PointerEvents cannot be captured and silently take a
+// different path through the code.
+if (flags.drag) {
+  const [selector, from = "0.5", to = "0.5"] = String(flags.drag).split("|");
+  const box = await send("Runtime.evaluate", {
+    expression: `(() => { const r = document.querySelector(${JSON.stringify(
+      selector,
+    )}).getBoundingClientRect(); return JSON.stringify({x:r.left,y:r.top,w:r.width,h:r.height}); })()`,
+    returnByValue: true,
+  });
+  const r = JSON.parse(box.result.value);
+  const at = (f) => ({ x: Math.round(r.x + r.w * Number(f)), y: Math.round(r.y + r.h / 2) });
+  const a = at(from);
+  const b = at(to);
+  const base = { button: "left", buttons: 1, clickCount: 1, pointerType: "mouse" };
+  await send("Input.dispatchMouseEvent", { type: "mousePressed", ...a, ...base });
+  const steps = 12;
+  for (let i = 1; i <= steps; i++) {
+    await send("Input.dispatchMouseEvent", {
+      type: "mouseMoved",
+      x: Math.round(a.x + ((b.x - a.x) * i) / steps),
+      y: a.y,
+      ...base,
+    });
+    await sleep(16);
+  }
+  await send("Input.dispatchMouseEvent", { type: "mouseReleased", ...b, ...base, buttons: 0 });
+  await sleep(120);
+}
+
+if (flags.click) {
+  await send("Runtime.evaluate", {
+    expression: `document.querySelector(${JSON.stringify(flags.click)}).click()`,
+  });
+  await sleep(Number(flags.after ?? 1800));
+}
+
 if (flags.eval) {
   const r = await send("Runtime.evaluate", {
     expression: flags.eval,

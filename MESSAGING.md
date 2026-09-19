@@ -196,6 +196,33 @@ Cheaper fallbacks if that is cut: *"See how scoring works"* (anchor to the scori
 *"Read today's sources"*. **Do not** build an email capture — there is no newsletter to put
 people in, and a transitional CTA that leads nowhere is worse than none.
 
+### The demo's question, and the words in it
+
+**The question is a real one from the app's own content**, not one written for the site:
+`~/Git/rankMaster/rankmaster-backend/seed/questions/en.json`. Using a real one is not a detail —
+authority point 2 is that every question cites its source and its year, and a sample question
+invented for a landing page cannot honestly carry a citation.
+
+> **Brazil is the __ largest country in the world by total area.** 1–20, answer **5**.
+> *UN Statistics Division, Demographic Yearbook — surface area, 2023.*
+
+Chosen because a thoughtful visitor lands on 5 or 6. The demo exists to show that the *distance*
+scores, so a question almost everyone gets exactly right proves nothing, and one almost everyone
+misses by six argues against the product. Brazil sits where the argument is.
+
+**The verdicts are the app's own**, from `RankMaster/Game/Scoring.swift`, minus the emoji and the
+exclamation mark — §3 bans both in the site's voice, and so does `DESIGN.md` §1:
+
+| Off by | App string | On the site |
+|---|---|---|
+| 0 | `Exactly right 🎯` | **Exactly right.** |
+| 1 | `Only one place off!` | **Only one place off.** |
+| 2 | `Close.` | **Close.** |
+| 3–4 | `Not quite.` | **Not quite.** |
+| 5+ | `Way off.` | **Way off.** |
+
+The closing line after the reveal is fixed: *"That's one. There are ten waiting in the app."*
+
 ---
 
 ## 6. Failure — the stakes

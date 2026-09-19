@@ -5,6 +5,7 @@
 import Layout from "../layouts/Layout.astro";
 import { APP_STORE_URL, CTA_LABEL, ONE_LINER, APP_NAME } from "../consts";
 import RankRail from "../components/RankRail.astro";
+import TryOne from "../components/TryOne.astro";
 ---
 
 <Layout title={APP_NAME} description={ONE_LINER}>
@@ -40,7 +41,10 @@ import RankRail from "../components/RankRail.astro";
 
   <main id="main">
     <section class="section container">
-      <p class="eyebrow">Rail — guess state</p>
+      <p class="eyebrow">Try one question, right here</p>
+      <TryOne />
+
+      <p class="eyebrow" style="margin-top: 96px;">Rail — guess state</p>
       <div style="max-width: 34rem;">
         <RankRail max={12} guess={4} label="Sample guess" />
       </div>

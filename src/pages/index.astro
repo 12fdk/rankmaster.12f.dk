@@ -4,6 +4,7 @@
 // layout shell, the stage, the wordmark, the eyebrow and the two buttons.
 import Layout from "../layouts/Layout.astro";
 import { APP_STORE_URL, CTA_LABEL, ONE_LINER, APP_NAME } from "../consts";
+import RankRail from "../components/RankRail.astro";
 ---
 
 <Layout title={APP_NAME} description={ONE_LINER}>
@@ -39,23 +40,25 @@ import { APP_STORE_URL, CTA_LABEL, ONE_LINER, APP_NAME } from "../consts";
 
   <main id="main">
     <section class="section container">
-      <p class="eyebrow">Surfaces</p>
-      <div class="panel" style="max-width: 34rem;">
-        <h2>Nearly right has never counted.</h2>
-        <p style="margin-top: 16px;">
-          Body copy on <code>--surface</code>, to check the raised panel reads as raised without a
-          shadow.
-        </p>
-        <p class="citation" style="margin-top: 16px;">
-          <svg viewBox="0 0 24 24" class="icon" style="width:14px;height:14px;" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path>
-          </svg>
-          <span>Source placeholder, 2025.</span>
-        </p>
+      <p class="eyebrow">Rail — guess state</p>
+      <div style="max-width: 34rem;">
+        <RankRail max={12} guess={4} label="Sample guess" />
       </div>
-      <p class="small" style="margin-top: 32px;">
-        Replaced in full by #4.
-      </p>
+
+      <p class="eyebrow" style="margin-top: 64px;">Rail — reveal state</p>
+      <div style="max-width: 34rem;">
+        <RankRail max={12} guess={4} truth={6} label="Sample reveal" />
+      </div>
+
+      <p class="eyebrow" style="margin-top: 64px;">Rail — in a panel, 30 ranks, minors dropped</p>
+      <div class="panel" style="max-width: 34rem; --rail-ring: var(--surface);">
+        <RankRail max={30} guess={11} truth={12} label="Sample wide scale" />
+      </div>
+
+      <p class="eyebrow" style="margin-top: 64px;">Rail — extremes</p>
+      <div style="max-width: 34rem;">
+        <RankRail max={12} guess={1} truth={12} label="Sample extremes" />
+      </div>
     </section>
   </main>
 </Layout>

@@ -96,7 +96,7 @@ await send("Emulation.setDeviceMetricsOverride", {
   width,
   height,
   deviceScaleFactor: dpr,
-  mobile: width < 768,
+  mobile: width <= 480,
 });
 if (flags.motion === "reduce") {
   await send("Emulation.setEmulatedMedia", {
@@ -130,7 +130,7 @@ if (out) {
     captureBeyondViewport: Boolean(flags.full),
     ...(flags.full
       ? {}
-      : { clip: { x: 0, y: 0, width, height, scale: dpr } }),
+      : { clip: { x: 0, y: 0, width, height, scale: 1 } }),
   });
   await writeFile(out, Buffer.from(shot.data, "base64"));
   console.log(`${out} ${width}x${flags.full ? "full" : height} @${dpr}x`);

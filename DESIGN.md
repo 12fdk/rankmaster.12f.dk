@@ -346,7 +346,11 @@ the same anatomy as the app.
 
 **Anatomy, bottom to top — all seven parts, in order:**
 
-1. **Baseline** — 3px line, `--line`, round caps, spanning the text column.
+1. **Baseline** — 3px line, `--line`, round caps, spanning the text column. **`--line`, not
+   `--sunken`** — §2's token comment calls `--sunken` "the unfilled rail track", which is loose:
+   `--sunken` is *darker* than `--ground` (1.26:1 the wrong way) and a track you cannot see is
+   not a scale. The app draws it in `--line`. Where the two sections disagree about the rail,
+   this one is the rail's spec.
 2. **Fill** — rank 1 → the guess, gold, **fading from 25% opacity at the left to 100% at the
    thumb**. The gradient is what makes it read as *accumulated distance* rather than as a progress
    bar. A flat fill is wrong.
@@ -365,6 +369,19 @@ the same anatomy as the app.
    near miss and the exact case the reveal exists to celebrate.
 8. **Gap bridge** *(reveal only)* — a dashed 3px rule spanning guess → truth at 30% opacity.
    **This is the point of the whole thing.** The error is a physical distance you can see.
+   Drawn in `--text-secondary`, not in gold and not in teal: the bridge measures the error, so
+   it belongs to neither the guess nor the truth, and rule 1 forbids a third use of either
+   meaning colour.
+
+**Two details the anatomy above leaves open, settled here:**
+
+- **The end labels are hidden when a mark sits on that end.** A guess of 1 otherwise prints
+  `1st` in gold under the thumb and `1st` in `--text-tertiary` directly beneath it. They are
+  hidden by `visibility`, not removed, so the demo can toggle them mid-drag without rebuilding
+  nodes.
+- **The thumb's glow is a radial gradient, not `feGaussianBlur`.** Same soft halo at the same
+  45% peak, with no filter region to overflow and no per-frame blur cost while the thumb is
+  being dragged — and rule 5 says a dragged thumb responds on the same frame.
 
 **If the site builds the interactive one-question demo** (`MESSAGING.md` §5), it must behave like
 the app's:

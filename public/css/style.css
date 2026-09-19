@@ -838,6 +838,7 @@ ul {
 }
 
 .try__points-unit {
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-eyebrow);
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -1012,6 +1013,10 @@ ul {
 
 .hero__trust {
   margin-top: var(--space-m);
+  /* Not --text-tertiary. These are four claims, not a footnote, and tertiary
+     lands at 4.54:1 over the beams' apex — the weakest text on the page.
+     --text-secondary takes it to 7.34:1 there (DESIGN.md §2). */
+  color: var(--text-secondary);
 }
 
 .hero__transitional {
@@ -1120,7 +1125,7 @@ ul {
 .villain__verdict {
   font-family: var(--font-ui);
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--villain);
@@ -1129,6 +1134,10 @@ ul {
 .villain__detail {
   margin-top: auto;
   color: var(--text-secondary);
+  /* Ranks and points are measurements, so they are tabular even in a
+     sentence — these two panels are read side by side and the figures have
+     to line up (DESIGN.md §3). */
+  font-variant-numeric: tabular-nums;
 }
 
 .villain__detail b {

@@ -9,7 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
+        # Full history: src/pages/sitemap.xml.ts dates each URL from the last
+        # commit that touched its sources, and a shallow clone would date every
+        # page the same. IndexNow diffs those dates, so wrong <lastmod> means
+        # either nothing gets resubmitted or everything does.
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

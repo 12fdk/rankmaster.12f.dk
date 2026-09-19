@@ -1,0 +1,106 @@
+---
+// Standalone: no site stylesheet, no analytics, no main.js. A 404 that depends
+// on three other requests is a 404 that can fail twice, and there is nothing
+// on it that needs them. The tokens it does use are copied from DESIGN.md §2,
+// which is the one place on this site that is allowed to happen.
+import Layout from "../layouts/Layout.astro";
+import { APP_STORE_URL } from "../consts";
+---
+
+<Layout
+  title="Page not found — RankMaster"
+  noindex
+  siteStylesheet={false}
+  analytics={false}
+  siteScript={false}
+>
+  <main class="wrap">
+    <img src="/images/emblem.svg" alt="" width="64" height="64" />
+    <p class="code">404</p>
+    <h1>That page is not here.</h1>
+    <p>It may have moved, or the link may be wrong. Everything else still is.</p>
+    <p class="links">
+      <a href="/">Home</a>
+      <a href="/support.html">Support</a>
+      <a href={APP_STORE_URL}>App Store</a>
+    </p>
+  </main>
+</Layout>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background: #0a1130;
+    color: #abb5dc;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 34rem;
+  }
+
+  img {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 32px;
+  }
+
+  .code {
+    font-family: ui-serif, "New York", "Iowan Old Style", Palatino, Georgia, serif;
+    font-size: clamp(3rem, 9vw, 5rem);
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: #f4c24a;
+  }
+
+  h1 {
+    font-family: ui-serif, "New York", "Iowan Old Style", Palatino, Georgia, serif;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #edf1ff;
+    margin-block: 8px 16px;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 32px;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: #edf1ff;
+    text-underline-offset: 3px;
+  }
+
+  a:focus-visible {
+    outline: 2px solid #f4c24a;
+    outline-offset: 2px;
+  }
+</style>

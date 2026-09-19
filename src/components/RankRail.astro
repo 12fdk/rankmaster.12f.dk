@@ -30,6 +30,9 @@ interface Props {
   label: string;
   /** Wire the 64px drag band and expose a real slider (issue #5). */
   interactive?: boolean;
+  /** Render the truth pin and the gap bridge but hold them back, so the demo
+   *  can land them on lock-in without building SVG nodes in JavaScript. */
+  revealPending?: boolean;
   locale?: string;
   id?: string;
   class?: string;
@@ -43,13 +46,15 @@ const {
   numeral = true,
   label,
   interactive = false,
+  revealPending = false,
   locale = "en",
   id,
   class: className,
 } = Astro.props;
 
 const uid = id ?? `rail-${Math.random().toString(36).slice(2, 9)}`;
-const revealed = truth !== null;
+const hasTruth = truth !== null;
+const revealed = hasTruth && !revealPending;
 
 /** Rank → percentage along the track. */
 const pct = (rank: number) => ((rank - min) / (max - min)) * 100;
@@ -80,6 +85,7 @@ const R_PIN = 11;
   data-max={max}
   data-guess={guess}
   data-truth={truth ?? undefined}
+  data-reveal-pending={revealPending ? "" : undefined}
 >
   {
     numeral && (
@@ -175,15 +181,30 @@ const R_PIN = 11;
       {/* 8 — gap bridge. This is the point of the whole thing: the error is a
           physical distance you can see. */}
       {
-        revealed && (
-          <line
-            x1={`${guessPct}%`}
-            x2={`${truthPct}%`}
-            y1={Y_RAIL}
-            y2={Y_RAIL}
-            class="rail__bridge"
-            data-rail-bridge
-          />
+        hasTruth && (
+          <>
+            {/* The casing. Identical geometry in the background's own colour,
+                so each dash sits in a notch cut out of whatever is beneath
+                it. Without this the bridge vanishes whenever the guess
+                overshoots the truth, because the gold fill runs underneath
+                it and a 30% grey dash on gold is nothing at all. */}
+            <line
+              x1={`${guessPct}%`}
+              x2={`${truthPct}%`}
+              y1={Y_RAIL}
+              y2={Y_RAIL}
+              class:list={["rail__bridge-casing", revealPending && "is-pending"]}
+              data-rail-bridge
+            />
+            <line
+              x1={`${guessPct}%`}
+              x2={`${truthPct}%`}
+              y1={Y_RAIL}
+              y2={Y_RAIL}
+              class:list={["rail__bridge", revealPending && "is-pending"]}
+              data-rail-bridge
+            />
+          </>
         )
       }
 
@@ -237,37 +258,45 @@ const R_PIN = 11;
           distance of one — the commonest near miss, and the exact case the
           reveal exists to celebrate. */}
       {
-        revealed && (
-          <g data-rail-truth>
-            <circle
-              cx={`${truthPct}%`}
-              cy={Y_RAIL}
-              r="24"
-              fill={`url(#${uid}-glow-truth)`}
-              aria-hidden="true"
-            />
-            <circle cx={`${truthPct}%`} cy={Y_RAIL} r={R_PIN} class="rail__pin" />
-            <circle
-              cx={`${truthPct}%`}
-              cy={Y_RAIL}
-              r={R_PIN - 1.6}
-              class="rail__cutout"
-              fill="none"
-              stroke-width="3.2"
-            />
-            <circle
-              cx={`${truthPct}%`}
-              cy={Y_RAIL}
-              r={R_PIN}
-              class="rail__pin-edge"
-              fill="none"
-              stroke-width="1"
-            />
+        hasTruth && (
+          <g data-rail-truth class:list={[revealPending && "is-pending"]}>
+            {/* The disc and its glow are their own group so the pin can scale
+                about its own centre. The glow circle is concentric with the
+                pin, so `transform-box: fill-box` puts the origin exactly on
+                it; including the label would drag the origin upward and the
+                pin would land off its own mark. */}
+            <g data-rail-truth-pin>
+              <circle
+                cx={`${truthPct}%`}
+                cy={Y_RAIL}
+                r="24"
+                fill={`url(#${uid}-glow-truth)`}
+                aria-hidden="true"
+              />
+              <circle cx={`${truthPct}%`} cy={Y_RAIL} r={R_PIN} class="rail__pin" />
+              <circle
+                cx={`${truthPct}%`}
+                cy={Y_RAIL}
+                r={R_PIN - 1.6}
+                class="rail__cutout"
+                fill="none"
+                stroke-width="3.2"
+              />
+              <circle
+                cx={`${truthPct}%`}
+                cy={Y_RAIL}
+                r={R_PIN}
+                class="rail__pin-edge"
+                fill="none"
+                stroke-width="1"
+              />
+            </g>
             <text
               x={`${truthPct}%`}
               y={Y_RAIL - R_PIN - 7}
               class="rail__label rail__label--truth"
               text-anchor="middle"
+              data-rail-truth-label
             >
               {ordinal(truth as number, locale)}
             </text>
@@ -282,7 +311,7 @@ const R_PIN = 11;
       <text
         x="0"
         y={Y_RAIL + R_THUMB + 38}
-        class:list={["rail__end", (guess === min || truth === min) && "is-hidden"]}
+        class:list={["rail__end", (guess === min || (revealed && truth === min)) && "is-hidden"]}
         text-anchor="start"
         data-rail-end="min"
       >
@@ -291,7 +320,7 @@ const R_PIN = 11;
       <text
         x="100%"
         y={Y_RAIL + R_THUMB + 38}
-        class:list={["rail__end", (guess === max || truth === max) && "is-hidden"]}
+        class:list={["rail__end", (guess === max || (revealed && truth === max)) && "is-hidden"]}
         text-anchor="end"
         data-rail-end="max"
       >

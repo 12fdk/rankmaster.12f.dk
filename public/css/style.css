@@ -658,12 +658,22 @@ ul {
 
 /* Neutral on purpose. The bridge measures the error; it belongs to neither
    the guess nor the truth, so it may not be drawn in either meaning colour. */
-.rail__bridge {
-  stroke: var(--text-secondary);
+.rail__bridge,
+.rail__bridge-casing {
   stroke-width: 3;
   stroke-linecap: round;
   stroke-dasharray: 3 7;
+}
+
+.rail__bridge {
+  stroke: var(--text-secondary);
   opacity: 0.3;
+}
+
+/* Cuts each dash's own notch out of the gold fill, so the bridge looks the
+   same whether the guess undershot the truth or ran past it. */
+.rail__bridge-casing {
+  stroke: var(--rail-ring);
 }
 
 .rail__label {
@@ -713,6 +723,14 @@ ul {
   border-radius: var(--radius-s);
 }
 
+/* Focus moved by a finger or a mouse, not by the keyboard: the element is
+   focused so the arrow keys work afterwards, but the ring stays off until a
+   key is actually pressed. :focus-visible alone does not cover this — the
+   focus here is programmatic, and browsers disagree about what that means. */
+.rail--interactive .rail__track[data-pointer-focus]:focus-visible {
+  outline: none;
+}
+
 .rail--interactive[aria-disabled="true"] .rail__track,
 .rail--locked .rail__track {
   cursor: default;
@@ -720,4 +738,201 @@ ul {
 
 .rail__end.is-hidden {
   visibility: hidden;
+}
+
+/* ============================================================================
+   The one-question demo (MESSAGING.md §5)
+   ========================================================================= */
+
+.try {
+  max-width: var(--measure);
+}
+
+.try__subject {
+  margin-top: var(--space-s);
+}
+
+.try__prompt {
+  font-size: var(--size-lede);
+  line-height: 1.45;
+  margin-top: var(--space-s);
+}
+
+/* The blank is the slot the guess goes in, so it is gold. */
+.try__blank {
+  color: var(--guess-ink);
+  letter-spacing: 0.04em;
+}
+
+.try .rail {
+  margin-top: var(--space-xxl);
+}
+
+.try__actions {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+/* Only true once the demo is wired, so it is added by JavaScript. */
+.try__hint {
+  display: none;
+}
+
+.try--ready .try__hint:not([hidden]) {
+  display: block;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.try__reveal {
+  margin-top: var(--space-xl);
+}
+
+/* The reveal panel carries a 4px banded edge on its leading side, in the
+   result band's colour (DESIGN.md §2, §6). A mark, never a fill. */
+.try__panel {
+  --band: var(--text-secondary);
+  display: flex;
+  gap: var(--space-l);
+  align-items: flex-start;
+  border-inline-start: 4px solid var(--band);
+}
+
+.try__panel[data-band="truth"] {
+  --band: var(--truth);
+}
+
+.try__panel[data-band="guess"] {
+  --band: var(--guess-ink);
+}
+
+.try__panel[data-band="secondary"] {
+  --band: var(--text-secondary);
+}
+
+.try__panel[data-band="miss"] {
+  --band: var(--miss);
+}
+
+.try__score {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex: none;
+}
+
+.try__points {
+  color: var(--band);
+}
+
+.try__points-unit {
+  font-size: var(--size-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--band);
+  padding-top: 0.5em;
+}
+
+.try__points-of {
+  color: var(--text-tertiary);
+}
+
+.try__verdict-line {
+  color: var(--band);
+  font-size: 1.25rem;
+}
+
+.try__verdict-detail {
+  margin-top: var(--space-xs);
+}
+
+.try__verdict-detail b {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.try__said {
+  color: var(--guess-ink);
+}
+
+.try__truth {
+  color: var(--truth);
+}
+
+.try__verdict .citation {
+  margin-top: var(--space-m);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line);
+}
+
+.try__after {
+  margin-top: var(--space-l);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.try__after .lede {
+  flex: 1 1 18rem;
+}
+
+@media (max-width: 480px) {
+  .try__panel {
+    flex-direction: column;
+    gap: var(--space-m);
+  }
+}
+
+/* ---- The reveal's motion (DESIGN.md §7) ---------------------------------
+   The pin lands; the bridge fades in with it. Everything else is still. */
+
+[data-rail-truth] {
+  transition: opacity 200ms ease-out;
+}
+
+[data-rail-truth].is-pending,
+.rail__bridge.is-pending,
+.rail__bridge-casing.is-pending {
+  opacity: 0;
+}
+
+.rail__bridge,
+.rail__bridge-casing {
+  transition: opacity 350ms ease-out;
+}
+
+@keyframes rm-pin-land {
+  from {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.16);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+[data-rail-truth-pin].is-landing {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rm-pin-land 320ms cubic-bezier(0.2, 0.8, 0.3, 1) 60ms both;
+}
+
+/* Replaced, not reduced: the pin appears without scaling and the count-up is
+   skipped — main.js shows the final value immediately. */
+@media (prefers-reduced-motion: reduce) {
+  [data-rail-truth-pin].is-landing {
+    animation: none;
+  }
 }

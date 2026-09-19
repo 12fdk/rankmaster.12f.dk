@@ -25,6 +25,8 @@ interface Props {
   siteStylesheet?: boolean;
   /** Load the Umami analytics script. The 404 page opts out. */
   analytics?: boolean;
+  /** Load js/main.js (scroll reveals, the demo). The 404 page opts out. */
+  siteScript?: boolean;
   /** Absolute or site-relative OG image. Defaults to the shared card. */
   ogImage?: string;
   /** "website" for the homepage, "article" for the legal/support pages. */
@@ -38,6 +40,7 @@ const {
   noindex = false,
   siteStylesheet = true,
   analytics = true,
+  siteScript = true,
   ogImage = "/images/og-image.png",
   ogType = "website",
 } = Astro.props;
@@ -143,6 +146,8 @@ const siteEntities = {
 
     {/* Brand entity graph (Organization + WebSite) */}
     <script is:inline type="application/ld+json" set:html={JSON.stringify(siteEntities)} />
+
+    {siteScript && <script is:inline defer src="/js/main.js" />}
 
     <slot name="head" />
 

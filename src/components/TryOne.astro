@@ -1,0 +1,96 @@
+---
+// The transitional CTA (MESSAGING.md §5): one question, playable here.
+//
+// The product's whole argument — that the distance between guess and truth is
+// more interesting than a tick or a cross — can be demonstrated in about eight
+// seconds and cannot be explained in a paragraph. This is that demonstration.
+//
+// The question is a real one from the app's own content plane, with its real
+// citation. A sample question invented for a landing page could not honestly
+// carry one, and "every fact is sourced" is an authority claim (§3).
+import RankRail from "./RankRail.astro";
+import { APP_STORE_URL, CTA_LABEL } from "../consts";
+import { ordinal } from "../utils/ordinal";
+
+const Q = {
+  category: "Geography",
+  subject: "Brazil",
+  before: "Brazil is the",
+  after: "largest country in the world by total area",
+  min: 1,
+  max: 20,
+  answer: 5,
+  source: "UN Statistics Division, Demographic Yearbook — surface area",
+  year: 2023,
+};
+
+// Starts at the midpoint of the range, so the visitor always has to move it.
+// A pre-answered slider makes the first guess feel accidental (DESIGN.md §5).
+const start = Math.floor((Q.min + Q.max) / 2);
+---
+
+<section class="try" id="try-one" data-try data-answer={Q.answer}>
+  <p class="eyebrow">{Q.category}</p>
+
+  <h2 class="try__subject">{Q.subject}</h2>
+  <p class="try__prompt">
+    {Q.before}
+    <span class="try__blank"
+      ><span class="visually-hidden">blank</span><span aria-hidden="true">&#95;&#95;</span></span
+    >
+    {Q.after}.
+  </p>
+
+  <RankRail
+    min={Q.min}
+    max={Q.max}
+    guess={start}
+    truth={Q.answer}
+    revealPending
+    interactive
+    label={`Where does ${Q.subject} rank? ${Q.min} to ${Q.max}.`}
+    class="try__rail"
+  />
+
+  <div class="try__actions">
+    <button type="button" class="btn btn--secondary" data-try-lock>Lock it in</button>
+    <p class="small try__hint" data-try-hint>Drag the marker, or use the arrow keys.</p>
+  </div>
+
+  {/* The reveal. Hidden until lock-in; aria-live so it is announced rather
+      than silently appearing behind the reader's position. */}
+  <div class="try__reveal" data-try-reveal hidden>
+    <div class="panel try__panel" data-try-panel role="status" aria-live="polite">
+      <div class="try__score">
+        <span class="numeral try__points" data-try-points>0</span>
+        <span class="try__points-unit">
+          pts<br /><span class="try__points-of">of 10</span>
+        </span>
+      </div>
+      <div class="try__verdict">
+        <h3 class="try__verdict-line" data-try-verdict></h3>
+        <p class="try__verdict-detail">
+          You said <b class="try__said" data-try-said></b> · it&rsquo;s
+          <b class="try__truth">{ordinal(Q.answer)}</b>
+        </p>
+        <p class="citation">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 11.5v5M12 7.75h.01"></path>
+          </svg>
+          <span>{Q.source}, {Q.year}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="try__after">
+      <p class="lede">That&rsquo;s one. There are ten waiting in the app.</p>
+      <a
+        class="btn btn--primary"
+        href={APP_STORE_URL}
+        data-umami-event="app-store-click"
+        data-umami-event-placement="try-one">{CTA_LABEL}</a
+      >
+    </div>
+  </div>
+</section>

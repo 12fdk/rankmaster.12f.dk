@@ -373,6 +373,14 @@ the same anatomy as the app.
    it belongs to neither the guess nor the truth, and rule 1 forbids a third use of either
    meaning colour.
 
+   **It is drawn twice.** Underneath the dashes, the same dashes again in the background's own
+   colour (`--rail-ring`), so each one sits in a notch cut out of whatever is beneath it. Without
+   that casing the bridge disappears the moment the guess **overshoots** the truth, because the
+   fill runs from rank 1 to the guess — straight under the bridge — and a 30% grey dash on gold
+   is nothing at all. The two backgrounds are opposite in luminance, so no single stroke colour
+   can survive both; the casing makes the bridge look identical in either direction, which is
+   the point, since the error is the same quantity whichever way you missed.
+
 **Two details the anatomy above leaves open, settled here:**
 
 - **The end labels are hidden when a mark sits on that end.** A guess of 1 otherwise prints
@@ -395,6 +403,12 @@ the app's:
 - `role="slider"` with `aria-valuemin`/`max`/`now` and `aria-valuetext="Rank 6 of 12"`. The app
   exposes a real slider to VoiceOver for exactly this reason — a hand-rolled adjustable element
   gets its string value silently dropped.
+- **A tap focuses the rail but does not draw the focus ring.** Focus has to move so the arrow
+  keys adjust it afterwards, the way a native range input behaves; a gold ring appearing under
+  your own finger is noise, not feedback. `:focus-visible` does not settle this on its own —
+  the focus is programmatic, and browsers disagree about what that means — so the rail marks
+  pointer-initiated focus itself and drops the mark on the first keypress. §8's rule is
+  unchanged: every element that can be reached by keyboard shows the ring when it is.
 - The tick marks and the glow are `aria-hidden`.
 - After lock-in the rail is disabled but stays fully visible. It is now a diagram of the result.
 

@@ -1,0 +1,69 @@
+# RankMaster: Guess the Rank
+
+> RankMaster is an iPhone game where every question states a fact with the rank
+> removed — "Australia is the __ largest country on Earth" — and you slide to
+> your answer. Closer is better, so being nearly right still scores. It is a
+> game about judgement, not memorised lists.
+
+Published by 12F ApS, a Danish company (CVR 45362957). Free, with no ads, no
+subscription, no in-app purchases and no tracking.
+
+## Scoring
+
+The whole marking scheme is `points = max(0, 10 - 2 * |guess - correctRank|)`:
+
+| Off by | 0  | 1 | 2 | 3 | 4 | 5+ |
+|--------|----|---|---|---|---|----|
+| Points | 10 | 8 | 6 | 4 | 2 | 0  |
+
+## Game modes
+
+- **Daily** — ten questions, the same ten for every player worldwide, once a
+  day, resetting at midnight UTC.
+- **Endless** — one question after another, for as long as you like.
+- **Categories** — geography, population, sport, economy and nature.
+
+Leaderboards cover today, this week, all-time and each category. Your own place
+is always pinned.
+
+## Facts and sources
+
+Every question cites the source its number came from and the year it is from,
+shown when the answer is revealed — rankings go stale, so the app says which
+vintage you are playing.
+
+## Privacy
+
+- You can play without an account. While anonymous, nothing you play is sent to
+  the server at all.
+- Sign in with Apple is optional and exists so scores survive a new phone and
+  can appear on a leaderboard.
+- Your display name is the only thing other players see.
+- Anonymous usage analytics are collected with PostHog, hosted in the EU. There
+  is currently no in-app switch to turn this off.
+- No advertising identifier, no ads, no attribution or ad-network SDKs, and
+  nothing is ever shared with data brokers.
+- Everything can be deleted from inside the app.
+
+Full detail: https://rankmaster.12f.dk/privacy-policy.html
+
+## Availability
+
+- Platform: iOS 17.6 or later. 24 MB. Rated 4+.
+- Price: free.
+- Languages: English, Danish, German, Spanish, French, Italian, Dutch,
+  Norwegian (Bokmål), Portuguese (Brazil), Swedish.
+- App Store: https://apps.apple.com/us/app/rankmaster-guess-the-rank/id6810373394
+
+## Pages
+
+- [Home](https://rankmaster.12f.dk/): what the game is, how scoring works, and
+  one question you can play in the browser.
+- [Support](https://rankmaster.12f.dk/support.html): contact, and answers about
+  scoring, accounts, leaderboards, languages and deleting your data.
+- [Privacy policy](https://rankmaster.12f.dk/privacy-policy.html): the full GDPR
+  policy.
+
+## Contact
+
+rankmaster@12f.dk — a human answers.

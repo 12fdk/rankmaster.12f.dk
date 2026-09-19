@@ -26,6 +26,12 @@
   --truth: #45e3b8; /* THE CORRECT ANSWER. A mark only, never a surface. */
   --miss: #e0705f; /* zero points. Warm terracotta. */
 
+  /* The villain's red cross, and nothing else on the site. A quotation of a
+     right/wrong buzzer, in the one panel where one is shown to be rejected —
+     a third as saturated as --miss so the app's own token keeps its single
+     meaning (DESIGN.md §2). 5.08:1 on --surface. */
+  --villain: #b08581;
+
   /* Channel values, so a token can be used at partial alpha without a
      second, drifting hex. Only for scrims and glows — never a new colour. */
   --ground-rgb: 10 17 48;
@@ -935,4 +941,601 @@ ul {
   [data-rail-truth-pin].is-landing {
     animation: none;
   }
+}
+
+/* ============================================================================
+   Homepage sections (MESSAGING.md §9)
+   ========================================================================= */
+
+/* ---- Navbar --------------------------------------------------------- */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-l);
+  padding-block: var(--space-m);
+}
+
+.nav__links {
+  display: none;
+  gap: var(--space-s);
+  margin-inline-start: auto;
+}
+
+.nav__links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding-inline: var(--space-s);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--size-body);
+}
+
+.nav__links a:hover {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.nav__cta {
+  display: none;
+  margin-inline-start: auto;
+  min-height: var(--tap);
+  width: auto;
+  padding-inline: var(--space-l);
+}
+
+@media (min-width: 768px) {
+  .nav__links {
+    display: flex;
+  }
+
+  .nav__cta {
+    display: inline-flex;
+    margin-inline-start: 0;
+  }
+}
+
+/* ---- Hero ----------------------------------------------------------- */
+
+.hero__grid {
+  display: grid;
+  gap: var(--space-xxl);
+  padding-block: clamp(48px, 8vw, 96px) var(--space-section);
+}
+
+.hero__lede {
+  margin-top: var(--space-l);
+}
+
+.hero__trust {
+  margin-top: var(--space-m);
+}
+
+.hero__transitional {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  margin-top: var(--space-l);
+  color: var(--text-primary);
+  font-size: var(--size-body);
+  text-decoration-color: currentColor;
+  text-underline-offset: 4px;
+}
+
+.hero__phone {
+  justify-self: center;
+  width: min(280px, 70vw);
+}
+
+@media (min-width: 900px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-section);
+  }
+
+  .hero__phone {
+    width: 300px;
+  }
+}
+
+/* The CTA lockup: the gold button, then the Apple badge beside it. */
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
+  max-width: none;
+}
+
+/* ---- Phones --------------------------------------------------------- */
+
+.phone {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  background: var(--sunken);
+  line-height: 0;
+}
+
+.phone img {
+  width: 100%;
+  height: auto;
+}
+
+/* ---- Stakes --------------------------------------------------------- */
+
+.stakes__line {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 3vw, 2rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  max-width: 30ch;
+}
+
+/* ---- The villain ---------------------------------------------------- */
+
+.villain__heading {
+  max-width: 22ch;
+}
+
+.villain__pair {
+  display: grid;
+  gap: var(--space-l);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .villain__pair {
+    grid-template-columns: 1fr 1.35fr;
+    align-items: stretch;
+  }
+}
+
+.villain__panel {
+  --rail-ring: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.villain__eyebrow {
+  margin-bottom: 0;
+}
+
+.villain__cross {
+  width: 48px;
+  height: 48px;
+  fill: none;
+  stroke: var(--villain);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.villain__verdict {
+  font-family: var(--font-ui);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--villain);
+}
+
+.villain__detail {
+  margin-top: auto;
+  color: var(--text-secondary);
+}
+
+.villain__detail b {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.villain__detail b.is-guess {
+  color: var(--guess-ink);
+}
+
+.villain__detail b.is-truth {
+  color: var(--truth);
+}
+
+.villain__rail {
+  padding-block: var(--space-s);
+}
+
+/* ---- Benefits ------------------------------------------------------- */
+
+.benefits__grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.benefits__item {
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-m);
+}
+
+.benefits__item h3 {
+  color: var(--text-primary);
+  font-size: 1.125rem;
+}
+
+.benefits__item p {
+  margin-top: var(--space-s);
+}
+
+@media (min-width: 768px) {
+  .benefits__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+}
+
+/* ---- Guide ---------------------------------------------------------- */
+
+.guide__empathy {
+  margin-top: var(--space-l);
+}
+
+.guide__points {
+  display: grid;
+  gap: var(--space-l);
+  margin-top: var(--space-xxl);
+  counter-reset: authority;
+}
+
+.guide__point {
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-m);
+}
+
+.guide__point h3 {
+  color: var(--text-primary);
+}
+
+.guide__point p {
+  margin-top: var(--space-xs);
+}
+
+@media (min-width: 768px) {
+  .guide__points {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--space-xl);
+  }
+}
+
+/* ---- How it works --------------------------------------------------- */
+
+.how__steps {
+  display: grid;
+  gap: var(--space-xl);
+  margin-top: var(--space-xxl);
+  counter-reset: step;
+}
+
+.how__step {
+  display: flex;
+  gap: var(--space-m);
+}
+
+.how__step-number {
+  flex: none;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--guess-ink);
+  width: 1.4em;
+}
+
+.how__step h3 {
+  color: var(--text-primary);
+  font-size: 1.125rem;
+}
+
+.how__step p {
+  margin-top: var(--space-xs);
+}
+
+.how__example {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--text-primary);
+  margin-top: var(--space-s);
+}
+
+@media (min-width: 768px) {
+  .how__steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.how__scoring {
+  margin-top: var(--space-xxl);
+  overflow-x: auto;
+}
+
+.scoring {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+  max-width: 30rem;
+}
+
+.scoring th,
+.scoring td {
+  border: 1px solid var(--line);
+  padding: var(--space-s);
+  text-align: center;
+  font-weight: 400;
+}
+
+@media (min-width: 480px) {
+  .scoring th,
+  .scoring td {
+    padding: var(--space-s) var(--space-m);
+  }
+}
+
+.scoring th[scope="row"] {
+  text-align: left;
+  color: var(--text-tertiary);
+  font-size: clamp(0.6875rem, 2.6vw, 0.8125rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.scoring thead td {
+  color: var(--text-secondary);
+}
+
+.scoring__points {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 5vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Ten is the exact hit, so it takes the 8–10 result band (DESIGN.md §2). */
+.scoring__points.is-exact {
+  color: var(--truth);
+}
+
+.how__caption {
+  margin-top: var(--space-m);
+}
+
+.how__cta {
+  margin-top: var(--space-xxl);
+}
+
+/* ---- Screenshots ---------------------------------------------------- */
+
+/* Phone: the reveal on its own, then the other four two-up. One screenshot
+   per row would put 3,500px of phone on a 375px screen, which is a scroll,
+   not a section. The reveal still leads and still gets the most space. */
+.shots__row {
+  display: grid;
+  gap: var(--space-xl) var(--space-l);
+  margin-top: var(--space-xl);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.shots__item--lead {
+  grid-column: 1 / -1;
+  max-width: 220px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+@media (min-width: 560px) {
+  .shots__row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .shots__item--lead {
+    grid-column: auto;
+    max-width: none;
+    margin-inline: 0;
+    text-align: start;
+  }
+}
+
+.shots__item h3 {
+  color: var(--text-primary);
+  margin-top: var(--space-m);
+}
+
+.shots__item p {
+  margin-top: var(--space-xs);
+}
+
+/* The reveal is the argument, so it gets the most space. */
+@media (min-width: 900px) {
+  .shots__row {
+    grid-template-columns: 1.35fr repeat(4, 1fr);
+    align-items: start;
+    gap: var(--space-xl);
+  }
+}
+
+/* ---- Modes ---------------------------------------------------------- */
+
+.modes__list {
+  display: grid;
+  gap: var(--space-l);
+  margin-top: var(--space-xl);
+}
+
+.modes__item {
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-m);
+}
+
+.modes__item h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.modes__item p {
+  margin-top: var(--space-xs);
+}
+
+@media (min-width: 768px) {
+  .modes__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+}
+
+/* ---- Commitments ---------------------------------------------------- */
+
+.commitments__list {
+  display: grid;
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
+  max-width: var(--measure);
+}
+
+.commitments__list li {
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-m);
+  color: var(--text-secondary);
+}
+
+.commitments__more {
+  margin-top: var(--space-l);
+}
+
+/* ---- FAQ ------------------------------------------------------------ */
+
+.faq__list {
+  margin-top: var(--space-xl);
+  max-width: var(--measure);
+  border-top: 1px solid var(--line);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  min-height: var(--tap);
+  padding-block: var(--space-m);
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 600;
+  list-style: none;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__chevron {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--text-tertiary);
+  transition: transform 120ms ease-out;
+}
+
+.faq__item[open] .faq__chevron {
+  transform: rotate(180deg);
+}
+
+.faq__item p {
+  padding-bottom: var(--space-l);
+}
+
+.faq__more {
+  margin-top: var(--space-l);
+}
+
+/* ---- Final CTA ------------------------------------------------------ */
+
+.final {
+  display: grid;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.final__phone {
+  width: min(240px, 55vw);
+  justify-self: start;
+}
+
+.final__copy .lede {
+  margin-top: var(--space-m);
+}
+
+.try-section__heading {
+  margin-bottom: var(--space-xxl);
+}
+
+@media (min-width: 768px) {
+  .final {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-section);
+  }
+
+  .final__phone {
+    width: 260px;
+  }
+}
+
+/* ---- Footer --------------------------------------------------------- */
+
+.footer {
+  background: var(--sunken);
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-xxl);
+  margin-top: var(--space-section);
+}
+
+.footer__inner {
+  display: grid;
+  gap: var(--space-l);
+}
+
+.footer__oneliner {
+  color: var(--text-secondary);
+  max-width: var(--measure);
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m) var(--space-l);
+}
+
+.footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--text-secondary);
+  text-decoration-color: var(--line);
+}
+
+.footer__links a:hover {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.footer__legal a {
+  color: inherit;
 }

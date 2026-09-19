@@ -106,6 +106,11 @@ not re-derive, re-tint or "adjust for screens".**
   --on-guess:        #14102E;  /* label ON gold. 8.3:1 on the deep stop. */
   --truth:           #45E3B8;  /* THE CORRECT ANSWER. A mark only, never a surface. */
   --miss:            #E0705F;  /* zero points. Warm terracotta. */
+
+  /* The villain's red cross, and nothing else on the site. Not a palette
+     colour — a quotation of one, in the one panel where a right/wrong buzzer
+     is being shown in order to be rejected. */
+  --villain:         #B08581;  /* 5.08:1 on --surface. Saturation 0.23 against --miss's 0.68. */
 }
 ```
 
@@ -117,6 +122,10 @@ not re-derive, re-tint or "adjust for screens".**
   (decision D-010). The one place the site may show a hard red is the villain panel
   (`MESSAGING.md` §9), where a red cross is being *rejected* — and even there, draw it in a
   neutral grey-red, not in `--miss`, so the app's own token keeps its single meaning.
+  That grey-red is `--villain`, `#B08581`: a third as saturated as `--miss` and clearly a
+  different material beside it, while still reading as red. It appears in the villain panel and
+  **nowhere else** — not on an error state, not on a link, not on a negative number. If a second
+  use is ever wanted, the answer is that the site has no second villain.
 - **Gold as a filled surface is always the gradient**, never a flat slab:
   ```css
   background: linear-gradient(to bottom, var(--guess-fill), var(--guess-fill-deep));
@@ -319,8 +328,15 @@ may run wider but never past `20ch` for the H1, or it stops reading as a stateme
 `--radius-l`. **Nothing on this site is a perfect capsule except the rail's thumb, which is a true
 circle.** No pill buttons, no pill badges, no `border-radius: 999px`.
 
-**Hit targets:** 44×44px minimum, no exceptions, including nav links and the footer. The rail's
-interactive band is 64px tall even though it draws 3px of line.
+**Hit targets:** 44×44px minimum, including nav links and the footer — a nav link needs 44px of
+*width* as well as height, which "FAQ" does not get for free. The rail's interactive band is 64px
+tall even though it draws 3px of line.
+
+**The one carve-out: a link inside a running sentence.** "the <u>privacy policy</u>" in a
+paragraph cannot be 44px tall without wrecking the leading of the text around it, and padding it
+out would overlap the neighbouring lines, which is worse for a pointer, not better. WCAG 2.2
+makes the same exception by name (2.5.8, *inline*). It applies to links set in prose and to
+nothing else: every standalone link, button, nav item, footer item and control clears 44px.
 
 **Borders:** 1px, `--line`. Never 2px, never a coloured border except the gold edge on the sample
 reveal panel (4px, banded — §5).

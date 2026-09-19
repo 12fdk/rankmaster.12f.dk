@@ -1,0 +1,37 @@
+---
+// The direct CTA. One action, everywhere (MESSAGING.md §5). Gold, and the only
+// gold button on the page — the Apple badge sits beside it for recognition,
+// never as a second gold button.
+import { APP_STORE_URL, CTA_LABEL } from "../consts";
+
+interface Props {
+  /** Umami placement, so the five CTAs can be told apart in analytics. */
+  placement: string;
+  badge?: boolean;
+  class?: string;
+}
+
+const { placement, badge = false, class: className } = Astro.props;
+---
+
+<p class:list={["cta", className]}>
+  <a
+    class="btn btn--primary"
+    href={APP_STORE_URL}
+    data-umami-event="app-store-click"
+    data-umami-event-placement={placement}>{CTA_LABEL}</a
+  >
+  {
+    badge && (
+      <a
+        class="badge-link"
+        href={APP_STORE_URL}
+        aria-label="Download RankMaster on the App Store"
+        data-umami-event="app-store-click"
+        data-umami-event-placement={`${placement}-badge`}
+      >
+        <img src="/images/app-store-badge.svg" alt="" width="161" height="54" />
+      </a>
+    )
+  }
+</p>

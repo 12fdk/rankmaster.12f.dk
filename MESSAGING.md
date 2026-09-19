@@ -178,9 +178,23 @@ sits beside it for recognition; the badge alone is a weaker CTA than a labelled 
 Acceptable alternates: *"Get RankMaster — free"*, *"Download on the App Store"* (fallback if the
 badge must stand alone).
 
-Placement: header, hero, after the How-it-works section, after the screenshots, and in the final
-CTA block. Gold (`#F4C24A`) on navy, `#14102E` label — it is the only gold button on the page,
-so nothing competes with it.
+Placement: header, hero, after the How-it-works section, and in the final CTA block. Gold
+(`#F4C24A`) on navy, `#14102E` label — it is the only gold button on the page, so nothing
+competes with it.
+
+> **Two placements from the first draft of this list did not survive the build**, both to
+> `DESIGN.md` §2's rule that no two gold-filled surfaces are ever in view at once:
+>
+> - **The header's CTA is the *secondary* button**, not the gold one. Same label, same
+>   destination, one less shout — the hero's gold button is a few hundred pixels below it.
+> - **There is no CTA after the screenshots.** Measured on the built page, it landed 1079px below
+>   the one that closes "How it works", so any window taller than that showed both. The
+>   How-it-works one is the stronger of the two anyway: it comes straight after the marking
+>   scheme, which is the moment of maximum conviction.
+>
+> That leaves four gold buttons — hero, the demo's reveal, How it works, and the final block —
+> with at least 2,100px between any two. The measurement is worth re-running whenever a section
+> is added or shortened.
 
 **Transitional CTA — the recommended one requires building something:**
 
@@ -366,9 +380,18 @@ Raw captures, framed in CSS. Order: `02_Reveal` first (the argument), then `01_G
 `06_Categories`, `04_Leaderboard`, `03_Summary`. Caption each with the line from
 `fastlane/frame_titles.json` for that slot — the copy is already written and already localized.
 
-### Modes — four, one line each
+### Modes — three, one line each
 
-Daily · Endless · Categories · Versus. One sentence each, no icons-for-the-sake-of-icons.
+Daily · Endless · Categories. One sentence each, no icons-for-the-sake-of-icons.
+
+> ⚠️ **Not Versus.** This section said four until the page was built. **Versus is deliberately
+> absent from the shipped app** — iOS `#158`: the mode is whole, its code, its tests and its ten
+> locales are all still in the repo, and `RootView` still maps the route, but the home screen row
+> is gone and `rankmaster://versus` falls through to `nil` on purpose, because live matchmaking
+> pairs nobody and even fixed pairing needs two people in the same two-minute window, which a new
+> app cannot supply. The App Store description agrees: its `PLAY YOUR WAY` list is Endless,
+> Categories, Daily. Putting Versus on the site would advertise a mode a visitor cannot reach.
+> **Put it back when iOS `#156` does** — that issue restores the row.
 
 ### Agreement plan
 

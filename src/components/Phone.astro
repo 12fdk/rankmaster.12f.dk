@@ -1,0 +1,36 @@
+---
+// A raw device capture, framed in CSS: a 1px --line border at --radius-l on the
+// device's own proportion. No perspective, no tilt, no shadow, no floating
+// (DESIGN.md §6, and §1's ban list).
+interface Props {
+  /** Fastlane slot name, e.g. "02_Reveal". Named `shot`, not `slot`: Astro
+   *  reads a `slot` attribute as its named-slot directive, so the value would
+   *  never reach the component. */
+  shot: string;
+  alt: string;
+  locale?: string;
+  eager?: boolean;
+  sizes?: string;
+  class?: string;
+}
+
+const { shot, alt, locale = "en-US", eager = false, sizes = "(min-width: 768px) 300px, 70vw", class: className } = Astro.props;
+const base = `/images/screenshots/${locale}/${shot}`;
+---
+
+<figure class:list={["phone", className]}>
+  <picture>
+    <source srcset={`${base}.avif`} type="image/avif" />
+    <source srcset={`${base}.webp`} type="image/webp" />
+    <img
+      src={`${base}.jpg`}
+      alt={alt}
+      width="620"
+      height="1348"
+      sizes={sizes}
+      loading={eager ? "eager" : "lazy"}
+      decoding={eager ? "sync" : "async"}
+      fetchpriority={eager ? "high" : undefined}
+    />
+  </picture>
+</figure>

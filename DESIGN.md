@@ -302,6 +302,14 @@ guess numeral, any count. In the app this is non-negotiable because the guess nu
 while the finger moves and proportional digits make it jitter horizontally, which makes the whole
 instrument feel cheap. The same is true of any number this site animates or updates.
 
+**"Numeral" means a measurement or a count, not every digit on the page.** A rank, a score, a
+points row, a tick label — anything that changes, or that is read against another number — is
+tabular. A CVR number in the footer, `iOS 17.6`, a year inside a citation: those are words that
+happen to be spelled with digits. They never move and nothing lines up beside them, and setting
+them in monospaced figures visibly disturbs the rhythm of the sentence they sit in. The two
+villain panels are the borderline case and they *are* tabular, because the whole point of that
+section is that the reader compares one panel's figures with the other's.
+
 ### Measure
 
 Body text column: `max-width: 34rem` (≈60–66 characters). The app caps its prompt at ~42
@@ -573,6 +581,20 @@ serif, gold on indigo. Not a screenshot, not a collage.
 ---
 
 ## 11. Checklist before any page is called done
+
+**Most of this list is now a script.** `scripts/verify.sh` runs the parts a machine can judge —
+contrast against the brightest pixel behind each element, the serif's boundaries, tabular
+numerals, overflow and 44px targets at 375 / 700 / 768 / 1024 / 1400, a +35% text stress, the
+one-gold-surface rule at every scroll position, looping animations, the reduced-motion
+replacement, internal links, stray `Icon/` assets and one-off hex. Run it against a preview
+server and read the output; it prints findings rather than a pass mark, because several of the
+"failures" are deliberate and documented (every `--text-tertiary` label, for one).
+
+Two lines of the list cannot be scripted. **Real iOS Safari** is done in the Simulator —
+`xcrun simctl openurl <udid> <url>`, then `idb ui swipe`/`idb ui tap` to drive the rail by touch,
+which is the only way to confirm that `touch-action: none` actually stops the page scrolling under
+a dragging finger. And whether the page is any good is still a judgement.
+
 
 - [ ] Every colour on the page is a token from §2. No one-off hex values anywhere.
 - [ ] Gold and teal appear **only** as guess and truth. No gold dividers, no teal links.

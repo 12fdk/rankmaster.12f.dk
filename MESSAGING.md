@@ -451,3 +451,21 @@ those as the tone reference for any locale, rather than translating this documen
    the reviewer's name and country as shown in the store. **Never before, and never invented.**
 
 Re-run this diagnostic against the built page before launch, not against this document.
+
+### Re-run against the built page, 2026-09-19
+
+| # | Check | Status |
+|---|---|---|
+| 1 | Understandable in 5 seconds | ✅ H1, subhead and `Free · No ads · No sign-up · No tracking` are all above the fold at 375px |
+| 2 | Customer is the hero | ✅ No origin story anywhere; provenance is one line in the guide and one in the footer |
+| 3 | Internal problem named | ✅ The stakes block, then the villain panel says it in pictures |
+| 4 | Empathy **and** authority | ⚠️ Unchanged, and will stay so. Empathy leads the guide section; authority is the five transparency and provenance points. Still no ratings to stand on |
+| 5 | Clear 3-step plan | ✅ Read · Slide · See the distance, then the marking scheme in full |
+| 6 | One obvious CTA | ✅ Four gold buttons, ≥2,139px apart — verified, not assumed, by `scripts/check-gold.js` |
+| 7 | Success **and** failure stakes | ✅ Both in the final block, once each |
+
+**Score: 9/10.** Point 1 is earned: the demo is built, it is a real question from the app's own
+content with its real citation, and it works by touch on iOS Safari. Point 2 is the only one
+left, and it is not ours to take — the App Store lookup still returns **0 ratings, 0 reviews**
+(checked 2026-09-19). When it returns five, §0's gate opens and the rating block goes in. Not
+before.

@@ -1,0 +1,30 @@
+---
+// The homepage FAQ. Same source as /support.html and as both pages' FAQPage
+// structured data, so an answer cannot drift between them.
+import { HOME_FAQ } from "../data/faq";
+---
+
+<section class="section container faq" id="faq" data-reveal>
+  <p class="eyebrow">Questions</p>
+  <h2>The ones people actually ask.</h2>
+
+  <div class="faq__list">
+    {
+      HOME_FAQ.map((item) => (
+        <details class="faq__item">
+          <summary>
+            <span>{item.q}</span>
+            <svg class="icon faq__chevron" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m7 10 5 5 5-5" />
+            </svg>
+          </summary>
+          <p>{item.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+
+  <p class="small faq__more">
+    More on the <a href="/support.html">support page</a>.
+  </p>
+</section>

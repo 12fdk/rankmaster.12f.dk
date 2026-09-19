@@ -1,0 +1,36 @@
+---
+// Above the fold (MESSAGING.md §9). The hero image is the *reveal*, not the
+// guess: the guess screen is the problem and the reveal is the resolution, so
+// the first picture on the page shows the gap.
+import Navbar from "./Navbar.astro";
+import Cta from "./Cta.astro";
+import Phone from "./Phone.astro";
+---
+
+<header class="stage hero">
+  <div class="stage__art" aria-hidden="true" role="presentation"></div>
+  <div class="stage__scrim" aria-hidden="true" role="presentation"></div>
+
+  <div class="container">
+    <Navbar />
+
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <h1>Find out how well you really know the world.</h1>
+
+        <p class="lede hero__lede">
+          Ten questions a day. Slide to your guess — the closer you land, the more you score.
+        </p>
+
+        <Cta placement="hero" badge class="hero__cta" />
+
+        <p class="small hero__trust">Free · No ads · No sign-up · No tracking</p>
+
+        {/* Transitional CTA, for the visitor who is not ready to install. */}
+        <a class="hero__transitional" href="#try-one">Try one question, right here →</a>
+      </div>
+
+      <Phone shot="02_Reveal" alt="The reveal: your guess and the true rank on the same scale, with the gap between them drawn out." eager class="hero__phone" />
+    </div>
+  </div>
+</header>

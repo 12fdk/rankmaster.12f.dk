@@ -1,0 +1,57 @@
+---
+// Empathy, then authority (MESSAGING.md §9 and §3).
+//
+// The empathy here is the two lines from §3 that do *not* restate the
+// Australia example — the villain panel two sections up has already made that
+// case in pictures, and saying it again in words weakens both.
+//
+// Five authority points, all true on launch day and all verifiable by the
+// visitor. No social proof: the app launched 2026-09-18 with 0 ratings and 0
+// reviews, and §0 says what that rules out. No founder story, no logo strip.
+import { SUPPORT_EMAIL, ORG_NAME, ORG_CVR } from "../consts";
+
+const AUTHORITY = [
+  {
+    title: "The scoring rule is published in full",
+    body: "Exact is ten points, one place off is eight, and it steps down to zero at five. The whole marking scheme is on this page and on the reveal screen every time you answer.",
+  },
+  {
+    title: "Every question cites its source and its year",
+    body: "Rankings go stale, so the app tells you which vintage you are playing rather than pretending a number is timeless.",
+  },
+  {
+    title: "Free — no ads, no subscription, nothing to buy",
+    body: "There is nothing to upsell, so there is nothing to interrupt you. No lives, no timers, no popup between you and the next question.",
+  },
+  {
+    title: "No tracking",
+    body: "We never touch the advertising identifier, we run no attribution or ad SDKs, and nothing is ever sold or shared with data brokers.",
+  },
+  {
+    title: `Made by ${ORG_NAME}, a registered Danish company`,
+    body: `CVR ${ORG_CVR}, with a support address a human answers: ${SUPPORT_EMAIL}.`,
+  },
+];
+---
+
+<section class="section container guide" data-reveal>
+  <div class="guide__lead">
+    <p class="eyebrow">The guide</p>
+    <h2>You knew it was about that big.</h2>
+    <p class="lede guide__empathy">
+      You are not bad at this. You have been marked badly. Nobody has the list memorised — that
+      was never the interesting question.
+    </p>
+  </div>
+
+  <ul class="guide__points">
+    {
+      AUTHORITY.map((point) => (
+        <li class="guide__point">
+          <h3>{point.title}</h3>
+          <p>{point.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

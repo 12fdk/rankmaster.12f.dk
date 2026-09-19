@@ -72,8 +72,13 @@ points = max(0, 10 - 2 * |guess - correctRank|)
 This is a game about **judgement, not memorised lists**. That framing is the whole pitch — keep
 it in the copy.
 
-**Game modes:** `daily` (ten questions, the same ten for everyone worldwide, once a day),
-`endless`, `category` (geography, population, sport, economy, nature), `versus`.
+**Game modes, as shipped:** `daily` (ten questions, the same ten for everyone worldwide, once a
+day), `endless`, `category` (geography, population, sport, economy, nature).
+
+`versus` exists in the code but **is not in the shipped app** and must not appear on the site
+(iOS `#158`): the home screen row is gone and `rankmaster://versus` deliberately resolves to
+nothing, because matchmaking cannot pair two players yet. iOS `#156` puts it back; this line and
+`MESSAGING.md` §9 change when it does.
 
 **Selling points, in the order the App Store description uses them:**
 

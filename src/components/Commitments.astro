@@ -1,0 +1,29 @@
+---
+// The agreement plan (MESSAGING.md §4). Each line is load-bearing legally as
+// well as commercially and must stay consistent with /privacy-policy.html —
+// if one changes, both change.
+const COMMITMENTS = [
+  "Free, with no ads and nothing to buy.",
+  "No sign-up. You are playing within seconds of opening it.",
+  "Play anonymously and nothing leaves your phone. Scores are only sent once you choose to sign in.",
+  "Your display name is the only thing other players ever see. Change it whenever you like.",
+  "Delete everything, from inside the app, whenever you want.",
+];
+---
+
+<section class="section container commitments" data-reveal>
+  <p class="eyebrow">What you are agreeing to</p>
+  <h2>Five things, and they all stay true.</h2>
+
+  <ul class="commitments__list">
+    {
+      COMMITMENTS.map((line) => (
+        <li>{line}</li>
+      ))
+    }
+  </ul>
+
+  <p class="small commitments__more">
+    The whole story is in the <a href="/privacy-policy.html">privacy policy</a>.
+  </p>
+</section>

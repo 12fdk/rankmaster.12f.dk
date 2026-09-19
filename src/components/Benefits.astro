@@ -1,0 +1,30 @@
+---
+// Three benefits, outcomes not features (MESSAGING.md §9).
+const BENEFITS = [
+  {
+    title: "Being close counts",
+    body: "Exact takes ten points. One place off takes eight. This is a game about judgement, not memorised lists.",
+  },
+  {
+    title: "You see exactly how close",
+    body: "The true rank appears on the same scale as your guess and the distance is drawn out in full. No red crosses. Just the gap.",
+  },
+  {
+    title: "Everyone gets the same ten",
+    body: "One shared daily round, the same ten questions for every player, everywhere, every day.",
+  },
+];
+---
+
+<section class="section container benefits" data-reveal>
+  <ul class="benefits__grid">
+    {
+      BENEFITS.map((b) => (
+        <li class="benefits__item">
+          <h3>{b.title}</h3>
+          <p>{b.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

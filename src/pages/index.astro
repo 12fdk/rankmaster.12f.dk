@@ -1,68 +1,123 @@
 ---
-// Placeholder. The real homepage — section order and copy from MESSAGING.md §9
-// — is 12fdk/rankmaster.12f.dk#4. This exercises the foundation only: the
-// layout shell, the stage, the wordmark, the eyebrow and the two buttons.
+// The homepage. Section order is the StoryBrand order from MESSAGING.md §9:
+// hero → stakes → the problem made visible → three benefits → guide → how it
+// works → screenshots → modes → the five commitments → FAQ → final CTA.
+//
+// The one-question demo is not in that list — it is the transitional CTA from
+// §5, and §9 only places the *link* to it in the hero. It sits here, straight
+// after the villain panel: that panel argues in pictures that a near miss
+// should count, and the demo is where the visitor gets to feel it. The three
+// benefits then read as evidence for something they have already experienced
+// rather than as claims about something they have not.
 import Layout from "../layouts/Layout.astro";
-import { APP_STORE_URL, CTA_LABEL, ONE_LINER, APP_NAME } from "../consts";
-import RankRail from "../components/RankRail.astro";
+import Hero from "../components/Hero.astro";
+import Stakes from "../components/Stakes.astro";
+import Villain from "../components/Villain.astro";
 import TryOne from "../components/TryOne.astro";
+import Benefits from "../components/Benefits.astro";
+import Guide from "../components/Guide.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import Screenshots from "../components/Screenshots.astro";
+import Modes from "../components/Modes.astro";
+import Commitments from "../components/Commitments.astro";
+import Faq from "../components/Faq.astro";
+import FinalCta from "../components/FinalCta.astro";
+import Footer from "../components/Footer.astro";
+import { HOME_FAQ, faqSchema } from "../data/faq";
+import {
+  SITE,
+  ORG_ID,
+  WEBSITE_ID,
+  APP_ID_ANCHOR,
+  APP_NAME,
+  APP_STORE_URL,
+  MIN_IOS,
+  ONE_LINER,
+} from "../consts";
+
+const title = "RankMaster — the quiz where nearly right still scores";
+const description =
+  "Ten questions a day. Slide to your guess instead of picking one, and see exactly how close you were. A free iPhone game with no ads, no sign-up and no tracking.";
+
+// VideoGame rather than a bare SoftwareApplication: it is a game, and the
+// category is what tells a search engine which shelf it belongs on.
+//
+// There is no aggregateRating here and there must not be one until the app has
+// real ratings — 0 reviews as of 2026-09-19 (MESSAGING.md §0). An offer at
+// price 0 is a fact about the app, not social proof, so it stays.
+const appSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "VideoGame",
+      "@id": APP_ID_ANCHOR,
+      name: APP_NAME,
+      alternateName: "RankMaster",
+      url: `${SITE}/`,
+      description: ONE_LINER,
+      applicationCategory: "GameApplication",
+      genre: ["Trivia", "Puzzle"],
+      gamePlatform: "iOS",
+      operatingSystem: `iOS ${MIN_IOS} or later`,
+      contentRating: "4+",
+      installUrl: APP_STORE_URL,
+      sameAs: APP_STORE_URL,
+      inLanguage: ["en", "da", "de", "es", "fr", "it", "nl", "nb", "pt-BR", "sv"],
+      image: `${SITE}/images/og-image.png`,
+      screenshot: [
+        `${SITE}/images/screenshots/en-US/02_Reveal.jpg`,
+        `${SITE}/images/screenshots/en-US/01_Guess.jpg`,
+        `${SITE}/images/screenshots/en-US/04_Leaderboard.jpg`,
+      ],
+      publisher: { "@id": ORG_ID },
+      author: { "@id": ORG_ID },
+      isPartOf: { "@id": WEBSITE_ID },
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url: APP_STORE_URL,
+      },
+    },
+    faqSchema(HOME_FAQ, `${SITE}/#faq`),
+  ],
+};
 ---
 
-<Layout title={APP_NAME} description={ONE_LINER}>
+<Layout title={title} description={description} canonical={`${SITE}/`}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(appSchema)} />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/screenshots/en-US/02_Reveal.avif"
+      type="image/avif"
+    />
+  </Fragment>
+
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="stage">
-    <div class="stage__art" aria-hidden="true" role="presentation"></div>
-    <div class="stage__scrim" aria-hidden="true" role="presentation"></div>
-    <div class="container">
-      <nav aria-label="Primary" style="padding-block: 16px;">
-        <a class="wordmark" href="/" aria-label="RankMaster">
-          <img src="/images/emblem.svg" alt="" width="26" height="26" />
-          <span aria-hidden="true">RANK<b>MASTER</b></span>
-        </a>
-      </nav>
-      <div class="section">
-        <p class="eyebrow">Foundation preview</p>
-        <h1>Find out how well you really know the world.</h1>
-        <p class="lede" style="margin-top: 24px;">
-          Ten questions a day. Slide to your guess — the closer you land, the more you score.
-        </p>
-        <p style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
-          <a class="btn btn--primary" href={APP_STORE_URL}>{CTA_LABEL}</a>
-          <a class="badge-link" href={APP_STORE_URL} aria-label="Download on the App Store">
-            <img src="/images/app-store-badge.svg" alt="" height="54" width="161" />
-          </a>
-        </p>
-        <p class="small" style="margin-top: 20px;">
-          Free · No ads · No sign-up · No tracking
-        </p>
-      </div>
-    </div>
-  </header>
+
+  <Hero />
 
   <main id="main">
-    <section class="section container">
-      <p class="eyebrow">Try one question, right here</p>
+    <Stakes />
+    <Villain />
+
+    <section class="section container try-section" id="try-section" data-reveal>
+      <h2 class="try-section__heading">Try one question, right here.</h2>
       <TryOne />
-
-      <p class="eyebrow" style="margin-top: 96px;">Rail — guess state</p>
-      <div style="max-width: 34rem;">
-        <RankRail max={12} guess={4} label="Sample guess" />
-      </div>
-
-      <p class="eyebrow" style="margin-top: 64px;">Rail — reveal state</p>
-      <div style="max-width: 34rem;">
-        <RankRail max={12} guess={4} truth={6} label="Sample reveal" />
-      </div>
-
-      <p class="eyebrow" style="margin-top: 64px;">Rail — in a panel, 30 ranks, minors dropped</p>
-      <div class="panel" style="max-width: 34rem; --rail-ring: var(--surface);">
-        <RankRail max={30} guess={11} truth={12} label="Sample wide scale" />
-      </div>
-
-      <p class="eyebrow" style="margin-top: 64px;">Rail — extremes</p>
-      <div style="max-width: 34rem;">
-        <RankRail max={12} guess={1} truth={12} label="Sample extremes" />
-      </div>
     </section>
+
+    <Benefits />
+    <Guide />
+    <HowItWorks />
+    <Screenshots />
+    <Modes />
+    <Commitments />
+    <Faq />
+    <FinalCta />
   </main>
+
+  <Footer />
 </Layout>

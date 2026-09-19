@@ -1,0 +1,39 @@
+---
+// Three modes, one line each (MESSAGING.md §9).
+//
+// Three, not four: Versus is deliberately absent from the shipped app — the
+// home screen row is gone and rankmaster://versus resolves to nothing, because
+// matchmaking cannot pair two players yet (iOS #158). The App Store
+// description's own list agrees. iOS #156 puts it back; this list changes when
+// it does, and not before.
+const MODES = [
+  {
+    name: "Daily",
+    body: "Ten questions. The same ten for everyone, everywhere, every day. One shot at it, then come back tomorrow.",
+  },
+  {
+    name: "Endless",
+    body: "One question after another, for as long as you like.",
+  },
+  {
+    name: "Categories",
+    body: "Geography, population, sport, economy and nature. Play one subject at a time.",
+  },
+];
+---
+
+<section class="section container modes" id="modes" data-reveal>
+  <p class="eyebrow">Play your way</p>
+  <h2>Three ways in.</h2>
+
+  <ul class="modes__list">
+    {
+      MODES.map((m) => (
+        <li class="modes__item">
+          <h3>{m.name}</h3>
+          <p>{m.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

@@ -1,0 +1,76 @@
+---
+// The plan: three steps, then the marking scheme in full, then the direct CTA
+// (MESSAGING.md §4 and §9).
+import Cta from "./Cta.astro";
+
+const STEPS = [
+  {
+    title: "Read the fact",
+    body: "A fact with the rank taken out.",
+    example: "Madagascar is the __ largest island in the world.",
+  },
+  {
+    title: "Slide to your guess",
+    body: "No options to pick from. Put the marker where you think it lands.",
+  },
+  {
+    title: "See the distance",
+    body: "The true rank appears on the same scale, and the gap between the two is drawn out. Closer scores more.",
+  },
+];
+
+// points = max(0, 10 - 2 * |guess - correctRank|). CLAUDE.md §2 names the
+// formula the single source of truth, so the row is generated from it rather
+// than typed out and left to drift.
+const OFF_BY = [0, 1, 2, 3, 4, 5];
+const points = (d: number) => Math.max(0, 10 - 2 * d);
+---
+
+<section class="section container how" id="how-it-works" data-reveal>
+  <p class="eyebrow">How it works</p>
+  <h2>Three steps, and no small print.</h2>
+
+  <ol class="how__steps">
+    {
+      STEPS.map((step, i) => (
+        <li class="how__step">
+          <span class="how__step-number" aria-hidden="true">
+            {i + 1}
+          </span>
+          <div>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+            {step.example && <p class="how__example">{step.example}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="how__scoring">
+    <table class="scoring">
+      <caption class="visually-hidden">
+        Points scored by how far the guess was from the correct rank
+      </caption>
+      <thead>
+        <tr>
+          <th scope="row">Off by</th>
+          {OFF_BY.map((d) => <td>{d === 5 ? "5+" : d}</td>)}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Points</th>
+          {
+            OFF_BY.map((d) => (
+              <td class:list={["scoring__points", d === 0 && "is-exact"]}>{points(d)}</td>
+            ))
+          }
+        </tr>
+      </tbody>
+    </table>
+    <p class="small how__caption">That&rsquo;s the whole marking scheme. Nothing hidden.</p>
+  </div>
+
+  <Cta placement="how-it-works" class="how__cta" />
+</section>

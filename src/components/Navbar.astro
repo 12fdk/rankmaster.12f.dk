@@ -1,0 +1,27 @@
+---
+// The header. Its CTA is the *secondary* button, not the gold one: the hero's
+// gold button is a few hundred pixels below it and DESIGN.md §2 allows only one
+// gold-filled surface in view at a time. Same label, same destination, one
+// less shout.
+import { APP_STORE_URL, CTA_LABEL } from "../consts";
+---
+
+<nav class="nav" aria-label="Primary">
+  <a class="wordmark" href="/" aria-label="RankMaster">
+    <img src="/images/emblem.svg" alt="" width="26" height="26" />
+    <span aria-hidden="true">RANK<b>MASTER</b></span>
+  </a>
+
+  <ul class="nav__links">
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#modes">Modes</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+
+  <a
+    class="btn btn--secondary nav__cta"
+    href={APP_STORE_URL}
+    data-umami-event="app-store-click"
+    data-umami-event-placement="nav">{CTA_LABEL}</a
+  >
+</nav>

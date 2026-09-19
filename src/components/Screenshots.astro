@@ -1,0 +1,59 @@
+---
+// Raw captures, framed in CSS. Order from MESSAGING.md §9: the reveal first,
+// because it is the argument. Captions are the lines already written and
+// already localized in fastlane/frame_titles.json, slot for slot.
+//
+// No CTA at the end of this section, although MESSAGING.md §5 lists one: it
+// would sit 1079px below the one that closes "How it works", and any window
+// taller than that shows both at once, which DESIGN.md §2 forbids. §5 now
+// records the measurement and the choice.
+import Phone from "./Phone.astro";
+
+const SHOTS = [
+  {
+    shot: "02_Reveal",
+    title: "See exactly how close you were",
+    sub: "The gap between your guess and the truth.",
+  },
+  {
+    shot: "01_Guess",
+    title: "How well do you know the world?",
+    sub: "Slide to your guess. Closer is better.",
+  },
+  {
+    shot: "06_Categories",
+    title: "Five subjects to master",
+    sub: "Geography, population, sport, economy, nature.",
+  },
+  {
+    shot: "04_Leaderboard",
+    title: "Climb the daily board",
+    sub: "Today, this week, and every category.",
+  },
+  {
+    shot: "03_Summary",
+    title: "Ten questions. One score.",
+    sub: "Points for precision, not for luck.",
+  },
+];
+---
+
+<section class="section container shots" id="screenshots" data-reveal>
+  <p class="eyebrow">In the app</p>
+
+  <ul class="shots__row">
+    {
+      SHOTS.map((s, i) => (
+        <li class:list={["shots__item", i === 0 && "shots__item--lead"]}>
+          <Phone
+            shot={s.shot}
+            alt={`${s.title} — ${s.sub}`}
+            sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, 62vw"
+          />
+          <h3>{s.title}</h3>
+          <p class="small">{s.sub}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

@@ -1,0 +1,25 @@
+---
+// The last block (MESSAGING.md §9). The stakes line sits immediately before
+// the button and appears exactly once on the page: the daily really does
+// expire, which is an honest structural fact about the product and not
+// manufactured urgency. No countdown, no scarcity badge.
+import Cta from "./Cta.astro";
+import Phone from "./Phone.astro";
+---
+
+<section class="section container final" data-reveal>
+  <Phone
+    shot="03_Summary"
+    alt="A finished round: ten questions, one score."
+    sizes="(min-width: 768px) 260px, 60vw"
+    class="final__phone"
+  />
+
+  <div class="final__copy">
+    <h2>Today&rsquo;s ten are live until midnight.</h2>
+    <p class="lede">
+      You can keep assuming you&rsquo;re good at this. Or you can find out in about two minutes.
+    </p>
+    <Cta placement="final" badge />
+  </div>
+</section>

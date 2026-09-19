@@ -13,7 +13,7 @@
 // with no --out it is a headless query tool (overflow audits, contrast
 // sampling, checking a computed style).
 import { spawn } from "node:child_process";
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -152,9 +152,10 @@ if (flags.click) {
   await sleep(Number(flags.after ?? 1800));
 }
 
-if (flags.eval) {
+const expression = flags.evalFile ? await readFile(flags.evalFile, "utf8") : flags.eval;
+if (expression) {
   const r = await send("Runtime.evaluate", {
-    expression: flags.eval,
+    expression,
     returnByValue: true,
     awaitPromise: true,
   });

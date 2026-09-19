@@ -1,0 +1,38 @@
+---
+// The problem, made visible (MESSAGING.md §9). Two panels: the right/wrong
+// buzzer on the left, and what RankMaster does instead on the right.
+//
+// The cross is drawn in --villain, a neutral grey-red, and not in --miss:
+// --miss means "zero points" inside the game and must keep that single
+// meaning (DESIGN.md §2). This is the only place --villain appears.
+import RankRail from "./RankRail.astro";
+---
+
+<section class="section container villain" data-reveal>
+  <h2 class="villain__heading">Nearly right has never counted. It does here.</h2>
+
+  <div class="villain__pair">
+    <div class="panel villain__panel villain__panel--old">
+      <p class="eyebrow villain__eyebrow">Every other quiz</p>
+      <svg class="villain__cross" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M14 14 34 34M34 14 14 34"></path>
+      </svg>
+      <p class="villain__verdict">Wrong</p>
+      <p class="villain__detail">
+        You said Australia was 5th. It is 6th.<br />
+        <b>0 points.</b>
+      </p>
+    </div>
+
+    <div class="panel villain__panel villain__panel--new">
+      <p class="eyebrow villain__eyebrow">RankMaster</p>
+      <div class="villain__rail">
+        <RankRail max={12} guess={5} truth={6} numeral={false} label="Australia: you said 5th, the answer is 6th" />
+      </div>
+      <p class="villain__detail">
+        You said <b class="is-guess">5th</b>. It&rsquo;s <b class="is-truth">6th</b>.<br />
+        <b>8 points.</b>
+      </p>
+    </div>
+  </div>
+</section>

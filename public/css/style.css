@@ -1539,3 +1539,106 @@ ul {
 .footer__legal a {
   color: inherit;
 }
+
+/* ============================================================================
+   The text pages — /privacy-policy.html and /support.html
+   ========================================================================= */
+
+.prose-page {
+  padding-block: var(--space-xxl) var(--space-section);
+}
+
+.prose-page__head {
+  max-width: var(--measure);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--line);
+}
+
+.prose-page__head .lede {
+  margin-top: var(--space-l);
+}
+
+.prose-page__updated {
+  margin-top: var(--space-l);
+}
+
+.prose {
+  max-width: var(--measure);
+  margin-top: var(--space-xl);
+}
+
+.prose > * + * {
+  margin-top: var(--space-m);
+}
+
+.prose h2 {
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  margin-top: var(--space-xxl);
+}
+
+.prose h3 {
+  color: var(--text-primary);
+  font-size: 1.0625rem;
+  margin-top: var(--space-xl);
+}
+
+.prose h2 + *,
+.prose h3 + * {
+  margin-top: var(--space-s);
+}
+
+.prose h2 + h3 {
+  margin-top: var(--space-l);
+}
+
+/* A list item that is nothing but a link is a standalone link, not an inline
+   one, so the 44px rule applies to it (DESIGN.md §4). */
+.prose li > a:only-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+
+.prose ul {
+  display: grid;
+  gap: var(--space-s);
+  padding-inline-start: var(--space-l);
+  list-style: disc;
+}
+
+.prose li::marker {
+  color: var(--text-tertiary);
+}
+
+.prose li {
+  max-width: var(--measure);
+}
+
+.prose strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.prose a {
+  color: var(--text-primary);
+  text-decoration-color: var(--text-tertiary);
+}
+
+/* A short summary block at the top of the privacy policy. Not a card for the
+   sake of one — it is a different kind of statement from the sections below,
+   and the hairline is what says so. */
+.prose .summary {
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: var(--space-l);
+  margin-top: var(--space-l);
+}
+
+.prose .summary ul {
+  padding-inline-start: var(--space-l);
+}
+
+.prose__contact {
+  margin-top: var(--space-xxl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--line);
+}

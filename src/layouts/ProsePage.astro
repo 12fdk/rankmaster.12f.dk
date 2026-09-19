@@ -1,0 +1,48 @@
+---
+// The shell for the two text pages. Flat --ground, no stage: the stage art is
+// the hero's background and only the hero's (DESIGN.md §2, W-002).
+import Layout from "./Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  heading: string;
+  standfirst?: string;
+  updated?: string;
+}
+
+const { title, description, canonical, heading, standfirst, updated } = Astro.props;
+---
+
+<Layout title={title} description={description} canonical={canonical} ogType="article">
+  <slot name="head" slot="head" />
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="container">
+    <Navbar />
+  </div>
+
+  <main id="main" class="container prose-page">
+    <header class="prose-page__head">
+      <h1>{heading}</h1>
+      {standfirst && <p class="lede">{standfirst}</p>}
+      {
+        updated && (
+          <p class="small prose-page__updated">
+            Last updated <time datetime={updated}>{new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(updated))}</time>
+          </p>
+        )
+      }
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,66 @@
+---
+// Ported from ~/Git/12f.dk/content/rankmaster/support.md, written 2026-09-16.
+// The FAQ itself lives in src/data/faq.ts so the homepage, this page and both
+// FAQPage graphs cannot drift apart.
+//
+// This is the URL the App Store's "Support URL" will point at (CLAUDE.md §8),
+// so it must keep its .html path.
+import ProsePage from "../layouts/ProsePage.astro";
+import { FAQ, faqSchema } from "../data/faq";
+import { SITE, SUPPORT_EMAIL, ORG_NAME, ORG_CVR, APP_STORE_URL, APP_SHORT_NAME } from "../consts";
+
+const title = "Support — RankMaster";
+const description =
+  "Help with RankMaster: how scoring works, leaderboards and accounts, languages, deleting your data, and how to reach a human.";
+
+const schema = {
+  "@context": "https://schema.org",
+  ...faqSchema(FAQ, `${SITE}/support.html#faq`),
+};
+
+const bugSubject = encodeURIComponent("RankMaster bug report");
+---
+
+<ProsePage
+  title={title}
+  description={description}
+  canonical={`${SITE}/support.html`}
+  heading="Support"
+  standfirst="Every question gives you a fact with the rank missing — Australia is the __ largest country on Earth — and you slide to your answer. The closer you land, the more you score."
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} slot="head" />
+
+  <h2>Get in touch</h2>
+  <ul>
+    <li>
+      Email: <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> — a human answers.
+    </li>
+    <li>
+      Report a bug: email
+      <a href={`mailto:${SUPPORT_EMAIL}?subject=${bugSubject}`}>{SUPPORT_EMAIL}</a> with what you
+      were doing, your iOS version and your device model.
+    </li>
+    <li>
+      <a href={APP_STORE_URL} rel="noopener">{APP_SHORT_NAME} on the App Store</a>
+    </li>
+  </ul>
+
+  <h2 id="faq">Frequently asked questions</h2>
+  {
+    FAQ.map((item) => (
+      <>
+        <h3>{item.q}</h3>
+        <p>{item.answer}</p>
+      </>
+    ))
+  }
+
+  <div class="prose__contact">
+    <h2>Privacy</h2>
+    <p>
+      See the <a href="/privacy-policy.html">privacy policy</a> for what is collected, what is public
+      and what is not.
+    </p>
+    <p class="small">{ORG_NAME} · CVR {ORG_CVR} · Denmark</p>
+  </div>
+</ProsePage>

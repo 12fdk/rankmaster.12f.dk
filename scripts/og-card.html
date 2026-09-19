@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- Source for public/images/og-image.png. Rendered at 1200×630 by
+     scripts/build-og.sh through headless Chrome, so the display serif
+     resolves to the real New York exactly as it does on the site.
+     DESIGN.md §10: the emblem plus the MESSAGING.md §8 short form, set in
+     the display serif, gold on indigo. Not a screenshot, not a collage. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../public/css/style.css" />
+    <style>
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 72px 80px;
+        background: var(--ground);
+      }
+      .mark { display: flex; align-items: center; gap: 16px; }
+      .mark img { width: 56px; height: 56px; }
+      .mark span {
+        font-family: var(--font-ui);
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--text-primary);
+      }
+      .mark b { color: var(--guess-ink); }
+      p.line {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 76px;
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        color: var(--guess-ink);
+        max-width: 22ch;
+        margin: 0;
+      }
+      .foot {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--font-ui);
+        font-size: 22px;
+        color: var(--text-tertiary);
+      }
+      .foot i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+    </style>
+  </head>
+  <body>
+    <div class="mark">
+      <img src="../public/images/emblem.svg" alt="" />
+      <span>RANK<b>MASTER</b></span>
+    </div>
+    <p class="line">It&rsquo;s a quiz where nearly right still scores.</p>
+    <div class="foot">
+      <span>Free on the App Store</span><i></i><span>No ads</span><i></i><span>No sign-up</span>
+    </div>
+  </body>
+</html>

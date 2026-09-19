@@ -1,0 +1,542 @@
+/* ============================================================================
+   RankMaster — rankmaster.12f.dk
+   Tokens transcribed from DESIGN.md §2–§4, token for token. Values are the
+   app's shipped tokens (DesignTokens.swift). Do not re-derive, re-tint or
+   "adjust for screens", and do not add a colour that is not in this block.
+   ========================================================================= */
+
+:root {
+  color-scheme: dark; /* one room. Not a media query. */
+
+  /* Neutrals — named for the role they play, not for what they look like */
+  --ground: #0a1130; /* page ground; the logo's disc at its outer stop */
+  --surface: #111c48; /* raised: panels, the reveal card, sheets */
+  --sunken: #05081a; /* recessed: footer, wells, the unfilled rail track */
+  --line: #1e2a5c; /* hairlines, minor ticks, dividers. 1px. */
+
+  --text-primary: #edf1ff;
+  --text-secondary: #abb5dc; /* body copy */
+  --text-tertiary: #808cbe; /* eyebrows, scale labels, footnotes */
+
+  /* The two meaning colours — nothing else may use these */
+  --guess-ink: #f4c24a; /* YOUR GUESS, as a mark. 11.2:1 on ground. */
+  --guess-fill: #f4c24a; /* top stop of a gold surface */
+  --guess-fill-deep: #e3a22e; /* bottom stop — the logo's gold at 72% */
+  --on-guess: #14102e; /* label ON gold. 8.3:1 on the deep stop. */
+  --truth: #45e3b8; /* THE CORRECT ANSWER. A mark only, never a surface. */
+  --miss: #e0705f; /* zero points. Warm terracotta. */
+
+  /* Channel values, so a token can be used at partial alpha without a
+     second, drifting hex. Only for scrims and glows — never a new colour. */
+  --ground-rgb: 10 17 48;
+  --guess-ink-rgb: 244 194 74;
+  --truth-rgb: 69 227 184;
+  --line-rgb: 30 42 92;
+
+  /* The stage scrim. DESIGN.md §2: the asset ships at 0.70 exposure, and text
+     is measured against the brightest pixel *under it*, which is #2B3450. A
+     0.40 --ground scrim takes that to #1E2643, where --text-secondary clears
+     the 7:1 body floor at 7.34:1 and --text-tertiary clears 4.5:1 at 4.54:1.
+     Solved, not chosen — see DESIGN.md §2. */
+  --stage-scrim: 0.4;
+
+  /* ---- Typography (DESIGN.md §3) ------------------------------------- */
+  /* New York on every Apple device. ui-serif resolves to it in Safari 13.1+. */
+  --font-display: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    serif;
+  /* SF Pro on Apple, the platform UI face elsewhere. */
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+
+  --size-h1: clamp(2.5rem, 7vw, 4.5rem);
+  --size-h2: clamp(1.75rem, 4vw, 2.75rem);
+  --size-numeral: clamp(3rem, 9vw, 5rem);
+  --size-lede: clamp(1.125rem, 2vw, 1.375rem);
+  --size-body: 1.0625rem; /* 17px */
+  --size-small: 0.8125rem; /* 13px */
+  --size-eyebrow: 0.6875rem; /* 11px */
+
+  /* ---- Space, grid, shape (DESIGN.md §4) ----------------------------- */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-section: clamp(64px, 10vw, 128px);
+
+  --gutter: 20px; /* the app's 20pt, deliberately wider than 16 */
+  --measure: 34rem; /* body text column, ≈60–66 characters */
+  --content: 72rem;
+
+  --radius-s: 10px;
+  --radius-m: 14px;
+  --radius-l: 20px;
+
+  --tap: 44px; /* minimum hit target, no exceptions */
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 48px;
+  }
+}
+
+/* ============================================================================
+   Base
+   ========================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ground);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: var(--size-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Every numeral on this site is tabular. In the app this is a correctness
+   requirement, not a nicety: proportional digits jitter under a moving
+   thumb and make the instrument feel cheap (DESIGN.md §3). */
+h1,
+h2,
+h3,
+.numeral,
+table,
+time,
+[data-numeral] {
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--size-h1);
+  max-width: 20ch; /* past this it stops reading as a statement */
+}
+
+h2 {
+  font-size: var(--size-h2);
+}
+
+h3 {
+  /* Sub-headings inside a section are chrome, not the subject — UI face.
+     The serif stops at section headings (DESIGN.md §3, W-001). */
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+p {
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--text-primary);
+  text-decoration-color: rgb(var(--line-rgb) / 1);
+  text-underline-offset: 3px;
+  transition: opacity 120ms ease-out;
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Every interactive element has a visible focus ring — 2px gold, 2px offset.
+   Gold is the one meaning colour a focus ring may use, because focus *is*
+   "where you are", which is what gold means (DESIGN.md §8). */
+:focus-visible {
+  outline: 2px solid var(--guess-ink);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: rgb(var(--guess-ink-rgb) / 0.3);
+  color: var(--text-primary);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -100%;
+  z-index: 100;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  color: var(--text-primary);
+  padding: 12px 20px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: var(--space-m);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ============================================================================
+   Layout primitives
+   ========================================================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--content);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--space-section);
+}
+
+.section--tight {
+  padding-block: calc(var(--space-section) * 0.6);
+}
+
+/* A raised surface is raised by being --surface against --ground plus a 1px
+   --line stroke. Not by a shadow — there are no drop shadows on this site
+   except the instrument's own glow (DESIGN.md §4). */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  padding: var(--space-l);
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.lede {
+  font-size: var(--size-lede);
+  line-height: 1.45;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+}
+
+.small {
+  font-size: var(--size-small);
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.numeral {
+  font-family: var(--font-display);
+  font-size: var(--size-numeral);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ============================================================================
+   Components (DESIGN.md §6)
+   ========================================================================= */
+
+/* The eyebrow — a 5px gold dot, 8px gap, then the uppercase tracked label.
+   This is the site's section marker; not an <h6>, not a coloured chip. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-family: var(--font-ui);
+  font-size: var(--size-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-m);
+}
+
+.eyebrow::before {
+  content: "";
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--guess-ink);
+}
+
+/* The one gold thing on the page. Full width on phone, auto on desktop.
+   Gold as a filled surface is always the gradient, never a flat slab — a
+   flat slab of the same yellow reads as a different material (D-084). */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-s);
+  width: 100%;
+  min-height: 56px;
+  padding: 0 var(--space-xl);
+  border: 0;
+  border-radius: var(--radius-l);
+  font-family: var(--font-ui);
+  font-size: var(--size-body);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 90ms ease-out,
+    box-shadow 120ms ease-out,
+    opacity 120ms ease-out;
+}
+
+.btn--primary {
+  background: linear-gradient(to bottom, var(--guess-fill), var(--guess-fill-deep));
+  color: var(--on-guess);
+  box-shadow: 0 0 24px rgb(var(--guess-ink-rgb) / 0.18);
+}
+
+/* Hover: no colour change — it is already the brightest thing on the page.
+   Lift the glow by 10% instead (DESIGN.md §6). */
+.btn--primary:hover {
+  opacity: 1;
+  box-shadow: 0 0 28px rgb(var(--guess-ink-rgb) / 0.28);
+}
+
+.btn--secondary {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text-primary);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+@media (min-width: 560px) {
+  .btn {
+    width: auto;
+  }
+}
+
+/* The Apple badge sits *beside* the gold button, never as a second gold
+   button. It counts as a gold surface for the one-per-viewport rule. */
+.badge-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+
+.badge-link img {
+  height: 54px;
+  width: auto;
+}
+
+/* The wordmark: the emblem at 2× the wordmark's font size, then RANK in
+   --text-primary and MASTER in --guess-ink. One link, one accessible name —
+   the emblem and the letters are the same word said twice. */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-s);
+  min-height: var(--tap);
+  text-decoration: none;
+}
+
+.wordmark:hover {
+  opacity: 1;
+}
+
+.wordmark img {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+
+.wordmark span {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.wordmark span b {
+  font-weight: 700;
+  color: var(--guess-ink);
+}
+
+/* Source citation. Where the site shows a sample question it must show its
+   citation — "every fact is sourced" is one of the five authority claims
+   (MESSAGING.md §3) and a sample without one undercuts it. */
+.citation {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: var(--size-small);
+  line-height: 1.45;
+  color: var(--text-tertiary);
+}
+
+.citation svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+
+/* Hand-drawn inline SVG at SF Symbols .medium weight: 1.5px stroke, round
+   caps and joins, on a 24px box. Never an icon font, never emoji. */
+.icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================================
+   The stage (DESIGN.md §2) — the hero section's background, not the page's.
+   Top-anchored cover: the beams converge at the very top edge and that
+   convergence is the image. Centring crops it off.
+   The 0.70 exposure is baked into the asset; never filter:brightness here.
+   ========================================================================= */
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--ground);
+}
+
+.stage__art,
+.stage__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.stage__art {
+  background-image: image-set(
+    url("/images/stage-mobile.avif") type("image/avif"),
+    url("/images/stage-mobile.webp") type("image/webp"),
+    url("/images/stage-mobile.jpg") type("image/jpeg")
+  );
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+}
+
+@media (min-width: 800px) {
+  .stage__art {
+    background-image: image-set(
+      url("/images/stage.avif") type("image/avif"),
+      url("/images/stage.webp") type("image/webp"),
+      url("/images/stage.jpg") type("image/jpeg")
+    );
+  }
+}
+
+/* Holds body copy over the beams' apex at 7.34:1, and blends the hero into
+   the flat --ground below it so the image has no hard bottom edge. */
+.stage__scrim {
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--ground-rgb) / var(--stage-scrim)) 0%,
+    rgb(var(--ground-rgb) / var(--stage-scrim)) 55%,
+    var(--ground) 100%
+  );
+}
+
+/* ============================================================================
+   Motion (DESIGN.md §7)
+   Direct manipulation is instant; consequence is animated. Nothing on this
+   site loops, pulses, floats, parallaxes or bursts.
+   ========================================================================= */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 400ms ease-out,
+    transform 400ms ease-out;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Not "reduced" — replaced. Scroll reveals do not move, they are simply
+   already visible; springs become a 150ms linear cross-fade. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+    transition-timing-function: linear !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn:active {
+    transform: none;
+  }
+}

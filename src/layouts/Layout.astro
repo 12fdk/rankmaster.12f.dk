@@ -1,0 +1,158 @@
+---
+// Shared page shell: head metadata, favicons, stylesheet, Umami analytics and
+// the site-wide Organization + WebSite entity graph. Pages pass their own
+// title/description/canonical and extend the head via the named "head" slot
+// (page-level structured data, extra styles).
+import {
+  SITE,
+  ORG_ID,
+  WEBSITE_ID,
+  ORG_NAME,
+  ORG_URL,
+  APP_SHORT_NAME,
+  APP_STORE_URL,
+  SUPPORT_EMAIL,
+  UMAMI_SCRIPT,
+  UMAMI_WEBSITE_ID,
+} from "../consts";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  noindex?: boolean;
+  /** Load css/style.css (the site stylesheet). The 404 page opts out. */
+  siteStylesheet?: boolean;
+  /** Load the Umami analytics script. The 404 page opts out. */
+  analytics?: boolean;
+  /** Absolute or site-relative OG image. Defaults to the shared card. */
+  ogImage?: string;
+  /** "website" for the homepage, "article" for the legal/support pages. */
+  ogType?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  noindex = false,
+  siteStylesheet = true,
+  analytics = true,
+  ogImage = "/images/og-image.png",
+  ogType = "website",
+} = Astro.props;
+
+const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${SITE}${ogImage}`;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE).href;
+
+// Site-wide brand entity graph. Page-level schema (VideoGame, FAQPage)
+// references these by @id from consts.ts rather than restating them.
+const siteEntities = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": ORG_ID,
+      name: ORG_NAME,
+      url: ORG_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE}/images/emblem-512.png`,
+        width: 512,
+        height: 512,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "DK",
+      },
+      identifier: {
+        "@type": "PropertyValue",
+        name: "CVR",
+        value: "45362957",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: SUPPORT_EMAIL,
+        availableLanguage: [
+          "English",
+          "Danish",
+          "German",
+          "Spanish",
+          "French",
+          "Italian",
+          "Dutch",
+          "Norwegian",
+          "Portuguese",
+          "Swedish",
+        ],
+      },
+      sameAs: [APP_STORE_URL, ORG_URL],
+    },
+    {
+      "@type": "WebSite",
+      "@id": WEBSITE_ID,
+      name: APP_SHORT_NAME,
+      url: `${SITE}/`,
+      inLanguage: "en",
+      publisher: { "@id": ORG_ID },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {/* The stage is one room, not a theme — the browser chrome joins it. */}
+    <meta name="theme-color" content="#0A1130" />
+    <meta name="color-scheme" content="dark" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* Favicons — built from the emblem on --ground (DESIGN.md §10). */}
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+
+    {/* Open Graph / Twitter */}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={APP_SHORT_NAME} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {/* Deep-links the App Store app on iOS Safari for the smart banner. */}
+    <meta name="apple-itunes-app" content="app-id=6810373394" />
+
+    {siteStylesheet && <link rel="stylesheet" href="/css/style.css" />}
+
+    {/* Brand entity graph (Organization + WebSite) */}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(siteEntities)} />
+
+    <slot name="head" />
+
+    {
+      analytics && UMAMI_WEBSITE_ID && (
+        <script is:inline defer src={UMAMI_SCRIPT} data-website-id={UMAMI_WEBSITE_ID} />
+      )
+    }
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

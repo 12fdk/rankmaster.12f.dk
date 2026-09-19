@@ -180,6 +180,50 @@ under it**, not against `--ground`. If a headline lands on the beams' apex, eith
 darken the art behind it with a `--ground` scrim. Do not lift the ink to compensate — that is how
 the three text tokens collapse into one off-white.
 
+### Measured, so it is not re-litigated
+
+Sampled from the shipped `rankmaster-stage.png` and computed in sRGB, the way a browser
+composites. These are results, not preferences — if a value here is changed, re-measure first.
+
+| Fact | Value |
+|---|---|
+| Brightest pixel in the source art | `#3E4A73`, at x=537 y=44 — the beams' apex, dead centre at the top edge |
+| The same pixel at the baked 0.70 exposure | `#2B3450` |
+| `--text-secondary` on it, unscrimmed | **6.07:1** — *below the 7:1 body floor* |
+| `--text-tertiary` on it, unscrimmed | **3.75:1** — below 4.5:1 |
+
+So the hero carries a **`--ground` scrim at 0.40**, which is the `--stage-scrim` token. It takes
+the brightest pixel to `#1E2643`, where `--text-secondary` reaches **7.34:1** and
+`--text-tertiary` **4.54:1**. Like the 0.70 exposure, this number is solved rather than chosen:
+0.35 leaves tertiary at 4.43:1 and 0.30 leaves body at 6.99:1. The scrim is uniform down to 55%
+of the hero and then ramps to solid `--ground`, which also gives the art a bottom edge to blend
+into — §2 says the ground below the hero is flat, and a hard cut there is worse than a fade.
+
+**`--text-tertiary` cannot reach 7:1 anywhere.** On flat `--ground` it is **5.65:1**. That is the
+app's own token and it is correct: §8's 7:1 floor is a floor for *body copy*, and tertiary is a
+de-emphasised label — eyebrows, scale labels, footnotes. It clears 4.5:1 on every surface the
+site uses. Do not "fix" this by lifting the ink; that collapses the three text tokens into one.
+
+Reference values on the flat surfaces, for the same reason:
+
+| | `--ground` | `--surface` | `--sunken` |
+|---|---|---|---|
+| `--text-primary` | 16.40:1 | 14.51:1 | 17.64:1 |
+| `--text-secondary` | 9.13:1 | 8.08:1 | 9.82:1 |
+| `--text-tertiary` | 5.65:1 | 5.00:1 | 6.07:1 |
+| `--guess-ink` | 11.15:1 | 9.87:1 | 11.99:1 |
+| `--truth` | 11.39:1 | 10.08:1 | — |
+| `--miss` | 5.86:1 | 5.18:1 | — |
+
+`--on-guess` on the gold gradient: **11.08:1** at the top stop, **8.29:1** at the deep stop.
+`--miss` at 5.86:1 is a *large* display numeral only (the 0-point band), never body copy.
+
+> ⚠️ **One known conflict, unresolved on purpose.** §5 draws the rail's baseline in `--line`,
+> which is **1.36:1** on `--ground` — below the 3:1 non-text floor in §8. It is kept because the
+> rail's state is carried by the gold fill, the thumb and the numeral, all of which clear 8:1,
+> and because `--line` is the app's shipped token for exactly this part. Raising it would be a
+> token change, which is a decision for the app's `design.md` first, not for this file.
+
 ---
 
 ## 3. Typography
@@ -468,6 +512,16 @@ All paths relative to `~/Git/rankMaster/RankMaster-IOS/`.
 **Favicon and OG image:** build both from the emblem on `--ground`. The OG image is 1200×630 and
 should be the emblem plus the one-liner short form from `MESSAGING.md` §8 — set in the display
 serif, gold on indigo. Not a screenshot, not a collage.
+
+### What shipped, and how to rebuild it
+
+| In `public/images/` | Built from | How |
+|---|---|---|
+| `emblem.svg` | `Emblem.imageset/rankmaster-emblem.svg` | Copied verbatim. It carries neither of the logo's two traps — no C2PA block, no `RANGVID` label — which is the second reason to prefer it over `rankmaster-logo.svg`. |
+| `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `emblem-512.png` | `emblem.svg` | `rsvg-convert` onto a flat `--ground` square. **Not ImageMagick** — its internal SVG renderer drops the gradients and returns a black disc. |
+| `stage{,-mobile}.{avif,webp,jpg}` | `Stage.imageset/rankmaster-stage.png` | `magick -colorspace sRGB -evaluate multiply 0.7`, which is the exact arithmetic `filter: brightness(.7)` performs, then 1080px desktop / 800px mobile. The source is 1080px wide, so it is never upscaled to the 1440px ceiling. 132 KB PNG → 10 KB AVIF. |
+| `og-image.png` | `scripts/og-card.html` | `scripts/build-og.sh`, through headless Chrome, so `ui-serif` resolves to the real New York. ImageMagick and rsvg cannot see Apple's system UI faces — `fc-match "New York"` returns Verdana. |
+| `app-store-badge.svg` | Apple's badge API | Fetched once and self-hosted, rather than hot-linking `tools.applemediaservices.com` on every page view. |
 
 ---
 

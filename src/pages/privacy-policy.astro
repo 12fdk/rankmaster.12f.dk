@@ -1,0 +1,270 @@
+---
+// Ported from ~/Git/12f.dk/content/rankmaster/privacy-policy.md, written
+// 2026-09-16. The substance is not rewritten here — changing what this page
+// says is a legal decision, not a design one (CLAUDE.md §6). Only the markup
+// and the internal links have changed, and the "Last Updated: see top of page"
+// placeholder has become a real date.
+//
+// The declarations here must not claim less collection than the App Store
+// nutrition label in fastlane/privacy.json: coarse location, email, name,
+// product interaction and user ID — analytics and app functionality, all
+// linked to you, none used for tracking.
+import ProsePage from "../layouts/ProsePage.astro";
+import { SITE, SUPPORT_EMAIL, ORG_NAME, ORG_CVR, ORG_URL, APP_SHORT_NAME } from "../consts";
+
+const UPDATED = "2026-09-16";
+const title = "Privacy policy — RankMaster";
+const description =
+  "What RankMaster stores, what appears publicly on the leaderboards, what the analytics collect, and how to delete everything. Written to meet our obligations under the GDPR.";
+---
+
+<ProsePage
+  title={title}
+  description={description}
+  canonical={`${SITE}/privacy-policy.html`}
+  heading="Privacy policy"
+  standfirst={`How ${APP_SHORT_NAME} handles information when you use our iOS application.`}
+  updated={UPDATED}
+>
+  <p>
+    This privacy policy describes how {APP_SHORT_NAME} handles information when you use our iOS
+    application. {APP_SHORT_NAME} is published by {ORG_NAME}, a Danish company (CVR {ORG_CVR}), and
+    this policy is written to meet our obligations under the EU General Data Protection Regulation
+    (GDPR).
+  </p>
+
+  <h2>In short</h2>
+  <div class="summary">
+    <ul>
+      <li>
+        <strong>
+          {APP_SHORT_NAME} has a server, and this is the one 12F app where that matters.
+        </strong>
+        Most of our apps keep everything on your device. This one has leaderboards, and a leaderboard
+        only exists if scores leave the device.
+      </li>
+      <li>
+        <strong>Your display name is public.</strong> It is shown to other players on the
+        leaderboards. That is the point of it. Nothing else about you is shown to anyone.
+      </li>
+      <li>
+        You can play <strong>without an account</strong>, and if you do, nothing you play is sent to
+        us at all.
+      </li>
+      <li>
+        We collect <strong>anonymous usage analytics</strong> so we can see which parts of the game
+        work. There is currently <strong>no in-app switch to turn this off</strong> — see below,
+        where we say so plainly rather than implying otherwise.
+      </li>
+      <li>
+        <strong>We do not track you.</strong> We never access the advertising identifier (IDFA), we
+        show no ads, we use no advertising or attribution software, and we never share your data with
+        data brokers or combine it with data from other companies.
+      </li>
+    </ul>
+  </div>
+
+  <h2>Playing without an account</h2>
+  <p>
+    When you first open {APP_SHORT_NAME} you are given an anonymous session so that you can start
+    playing immediately — there is no sign-up wall. That session is a random identifier belonging to
+    one installation of the app on one device.
+  </p>
+  <p>
+    While you are anonymous, <strong>rounds you play are not sent to our server</strong>. No score,
+    no run history, no leaderboard entry. What the app remembers — which questions you have seen,
+    whether you have played today&rsquo;s daily challenge, whether you have finished the introduction
+    — is stored on your device only.
+  </p>
+
+  <h2>If you sign in with Apple</h2>
+  <p>
+    Signing in is optional and exists for one reason: so that your record survives a new phone and
+    can appear on a leaderboard.
+  </p>
+  <p>
+    <strong>What Apple tells us.</strong> We use Sign in with Apple. Apple sends us a token
+    identifying you and, on the <strong>first</strong> authorisation only, the name and email address
+    you choose to share. You may use Apple&rsquo;s <em>Hide My Email</em> relay, in which case we
+    never see your real address. We use the name only to offer it to you as a display name; we do not
+    email you.
+  </p>
+  <p>
+    <strong>What we then store on our server</strong>, which is operated by us in the EU:
+  </p>
+  <ul>
+    <li>An account identifier, and the Apple identity linked to it</li>
+    <li>
+      A profile: your <strong>display name</strong>, a country code derived from your device&rsquo;s
+      region, and a seed used to draw your avatar
+    </li>
+    <li>
+      A run log: for each recorded round, the score, how many questions it had, how many you got
+      exactly right, your best run, the mode and category, your language, the app version and when
+      you played
+    </li>
+    <li>One best-score row per leaderboard you appear on</li>
+  </ul>
+  <p>
+    <strong>What is public.</strong> Your <strong>display name</strong> and your score are shown to
+    other players on the leaderboards. Your country code is stored but is not displayed. Your email
+    address, your Apple Account and your account identifier are never shown to anyone.
+  </p>
+  <p>
+    You choose the display name. You are given a generated one such as <em>Quiet Meridian</em> when
+    you start, and you can change it at any time under the profile icon → <strong>Change name</strong
+    >.
+  </p>
+
+  <h2>Analytics</h2>
+  <p>
+    We collect anonymous usage data to understand how people play {APP_SHORT_NAME} and where they get
+    stuck. This is done with <strong>PostHog</strong>, hosted in the EU —
+    <a href="https://posthog.com/privacy" rel="noopener">privacy policy</a>.
+  </p>
+  <h3>What we collect</h3>
+  <ul>
+    <li>Which mode you chose and whether you arrived from a link</li>
+    <li>
+      That a round started, finished or could not be dealt, with the score, the number of questions,
+      how many were exact and your best run
+    </li>
+    <li>Whether a score saved, queued, failed or was skipped</li>
+    <li>
+      That an account was created, upgraded, signed out or deleted; that a name change was accepted
+      or rejected; that a sign-in offer was shown, opened or dismissed
+    </li>
+    <li>Which leaderboard was viewed, and that a review prompt was asked for</li>
+    <li>
+      Technical context added by the analytics software: device model, iOS version, app version,
+      language and region, and whether the build is from the App Store, TestFlight, a simulator or a
+      development machine
+    </li>
+  </ul>
+  <h3>What we do not collect</h3>
+  <ul>
+    <li>Your display name, your country code or your email address</li>
+    <li>The questions you were asked or the answers you gave</li>
+    <li>Precise location</li>
+    <li>The advertising identifier (IDFA)</li>
+    <li>Any screen recording or screenshot of the app</li>
+  </ul>
+  <p>
+    This is enforced by how the app is built, not only by policy: the analytics interface has no
+    free-form field, so a new piece of information cannot be sent without a deliberate code change.
+  </p>
+  <p>
+    <strong>Identifiers.</strong> So that we can count distinct players rather than distinct sessions,
+    analytics events carry the account identifier described above. It is meaningless outside {
+      APP_SHORT_NAME
+    } and cannot be used to track you across other companies&rsquo; apps or websites.
+  </p>
+  <p>
+    <strong>Approximate location.</strong> As with any internet request, your IP address reaches our
+    analytics provider. PostHog derives an approximate country and city from it and attaches that to
+    the event. The app neither sends nor can switch this off — it is a setting on our analytics
+    account — but because it is collected against your account identifier we declare it as coarse
+    location in the app&rsquo;s privacy report on the App Store.
+  </p>
+  <p>
+    <strong>Turning analytics off.</strong> There is currently no setting in the app to switch
+    analytics off. We would rather say that here than leave you looking for one. If you would like
+    your analytics data removed, write to us and we will delete the records held against your account
+    identifier.
+  </p>
+
+  <h2>Tracking</h2>
+  <p>
+    {APP_SHORT_NAME} does not track you, as the term is used in Apple&rsquo;s App Tracking
+    Transparency framework and in Apple&rsquo;s App Store guidelines. Specifically:
+  </p>
+  <ul>
+    <li>
+      We do not access the advertising identifier (IDFA), and the app contains no advertising,
+      attribution or ad-network software.
+    </li>
+    <li>We do not link the data we collect with data from other companies for advertising purposes.</li>
+    <li>We never share your data with data brokers.</li>
+    <li>The app shows no advertising.</li>
+  </ul>
+  <p>
+    For this reason the app does not ask for App Tracking Transparency permission — there is nothing
+    to authorise.
+  </p>
+
+  <h2>Permissions the app asks for</h2>
+  <p>
+    {APP_SHORT_NAME} asks for no device permissions. It does not use your camera, photos, contacts,
+    microphone, calendar, notifications or location services.
+  </p>
+
+  <h2>Where your data is held</h2>
+  <p>
+    Accounts, profiles, scores and leaderboards are stored on servers operated by {ORG_NAME} in the
+    EU. Analytics are held by PostHog in the EU. We do not sell data, and we do not transfer it
+    outside the EU/EEA for these purposes.
+  </p>
+
+  <h2>How long we keep data</h2>
+  <ul>
+    <li>Your account, profile and leaderboard entries are kept until you delete your account.</li>
+    <li>
+      Daily leaderboards are removed after 30 days and weekly leaderboards after 12 weeks,
+      automatically.
+    </li>
+    <li>
+      Analytics are kept only as long as they are useful for improving the game, subject to
+      PostHog&rsquo;s own retention policy.
+    </li>
+    <li>Anything stored only on your device goes when you delete the app.</li>
+  </ul>
+
+  <h2>Children&rsquo;s privacy</h2>
+  <p>
+    {APP_SHORT_NAME} is a general-audience game and is not directed at children. We do not knowingly
+    collect personal information from children. Because display names are public, please choose one
+    that does not identify you.
+  </p>
+
+  <h2>Your rights</h2>
+  <p>
+    Under the GDPR you have the right to access, correct, delete, restrict or object to the
+    processing of your personal data, and the right to data portability and to lodge a complaint with
+    a supervisory authority (in Denmark, Datatilsynet).
+  </p>
+  <p>Two of these you can exercise in the app immediately:</p>
+  <ul>
+    <li>
+      <strong>Correct</strong> — change your display name at any time under the profile icon →
+      <strong>Change name</strong>.
+    </li>
+    <li>
+      <strong>Delete</strong> — profile icon → <strong>Delete account</strong> removes your account,
+      your profile and your leaderboard entries from our server. Deleting the app alone does not do
+      this; it removes what is on the device and leaves the account behind.
+    </li>
+  </ul>
+  <p>
+    For anything else, including a copy of the data held against your account, write to us at the
+    address below.
+  </p>
+
+  <h2>Changes to this privacy policy</h2>
+  <p>
+    We may update this privacy policy from time to time. We will post the new version here and update
+    the date at the top of the page.
+  </p>
+
+  <div class="prose__contact">
+    <h2>Contact us</h2>
+    <p>
+      If you have any questions about this privacy policy, or want to exercise any of the rights
+      above, please contact us:
+    </p>
+    <ul>
+      <li>Email: <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></li>
+      <li>{ORG_NAME}, CVR {ORG_CVR}, Denmark</li>
+      <li>Website: <a href={ORG_URL} rel="noopener">12f.dk</a></li>
+    </ul>
+  </div>
+</ProsePage>

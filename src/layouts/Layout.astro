@@ -153,7 +153,26 @@ const siteEntities = {
 
     {
       analytics && UMAMI_WEBSITE_ID && (
-        <script is:inline defer src={UMAMI_SCRIPT} data-website-id={UMAMI_WEBSITE_ID} />
+        // Production-hostname guard: local dev (localhost/127.0.0.1/preview domains)
+        // never reports to the rankmaster.12f.dk production site.
+        <script
+          is:inline
+          define:vars={{ umamiHost: "rankmaster.12f.dk", umamiScript: UMAMI_SCRIPT, umamiWebsiteId: UMAMI_WEBSITE_ID }}
+        >
+          (function () {
+            var d = document;
+            if (
+              location.hostname === umamiHost ||
+              location.hostname === "www." + umamiHost
+            ) {
+              var s = d.createElement("script");
+              s.defer = true;
+              s.src = umamiScript;
+              s.dataset.websiteId = umamiWebsiteId;
+              d.head.appendChild(s);
+            }
+          })();
+        </script>
       )
     }
   </head>
